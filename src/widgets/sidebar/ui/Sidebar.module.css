@@ -1,0 +1,89 @@
+.sidebar {
+  width: 240px;
+  min-width: 240px;
+  background-color: #34376c;
+  border-radius: 20px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  height: fit-content;
+}
+
+.profileCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.avatar {
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 16px;
+}
+
+.userName {
+  color: white;
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.role {
+  color: #d8d8f0;
+  font-size: 15px;
+  margin-bottom: 18px;
+}
+
+.profileButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 42px;
+  border-radius: 10px;
+  background-color: #7367f0;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  padding-top: 20px;
+}
+
+.link {
+  color: white;
+  text-decoration: none;
+  font-size: 17px;
+  padding: 8px 6px;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.link:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.active {
+  color: #8b7cff;
+  font-weight: 700;
+}
+
+.logoutButton {
+  margin-top: auto;
+  height: 42px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: white;
+  font-size: 17px;
+  text-align: left;
+  cursor: pointer;
+}

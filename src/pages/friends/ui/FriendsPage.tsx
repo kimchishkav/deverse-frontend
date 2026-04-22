@@ -1,3 +1,9 @@
+import { MainLayout } from "@/widgets/layout";
+
 export const FriendsPage = () => {
-  return <div>Friends Page</div>;
+  return (
+    <MainLayout>
+      <div style={{ color: "white", fontSize: "32px" }}>Friends Page</div>
+    </MainLayout>
+  );
 };

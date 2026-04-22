@@ -1,3 +1,9 @@
+import { MainLayout } from "@/widgets/layout";
+
 export const ProjectsPage = () => {
-  return <div>Projects Page</div>;
+  return (
+    <MainLayout>
+      <div style={{ color: "white", fontSize: "32px" }}>Projects Page</div>
+    </MainLayout>
+  );
 };
