@@ -5,28 +5,37 @@ import { PostList } from "@/widgets/post-list";
 import { type Post } from "@/entities/post";
 import avatarImage from "@/img/avatar.jpg";
 
+import { createPost } from "@/entities/post";
+
 import styles from "./FeedPage.module.css";
 import { CreatePostForm } from "@/features/create-post";
 
 export const FeedPage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
 
-  const handleCreatePost = (content: string) => {
-    const newPost: Post = {
-      id: Date.now(),
-      content,
-      likesCount: 0,
-      commentsCount: 0,
-      viewsCount: 0,
-      author: {
-        id: 999,
-        name: "Victoria Kim",
-        profession: "Frontend Developer",
-        avatar: avatarImage,
-      },
-    };
+  const handleCreatePost = async (content: string) => {
+    try {
+      const createdPost = await createPost({ content });
 
-    setPosts((prevPosts) => [newPost, ...prevPosts]);
+      const newPost: Post = {
+        id: createdPost.id ?? Date.now(),
+        content: createdPost.content ?? content,
+        likesCount: createdPost.likesCount ?? 0,
+        commentsCount: createdPost.commentsCount ?? 0,
+        viewsCount: createdPost.viewsCount ?? 0,
+        author: createdPost.author ?? {
+          id: 999,
+          name: "Victoria Kim",
+          profession: "Frontend Developer",
+          avatar: avatarImage,
+        },
+      };
+
+      setPosts((prevPosts) => [newPost, ...prevPosts]);
+    } catch (error) {
+      console.error("Create post error:", error);
+      alert("Не удалось создать пост. Убедись, что ты залогинена.");
+    }
   };
 
   return (
