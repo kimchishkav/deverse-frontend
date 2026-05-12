@@ -1,17 +1,42 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+import { createPost, type Post } from "@/entities/post";
+import { getUserPosts } from "@/entities/post/api/getUserPosts";
+import { CreatePostForm } from "@/features/create-post";
+import avatarImage from "@/img/avatar.jpg";
 import { MainLayout } from "@/widgets/layout";
 import { PostList } from "@/widgets/post-list";
-import { type Post } from "@/entities/post";
-import avatarImage from "@/img/avatar.jpg";
-
-import { createPost } from "@/entities/post";
 
 import styles from "./FeedPage.module.css";
-import { CreatePostForm } from "@/features/create-post";
 
 export const FeedPage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const userData = localStorage.getItem("user");
+
+      if (!userData) {
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+
+        const user = JSON.parse(userData) as { id: number };
+        const userPosts = await getUserPosts(user.id);
+
+        setPosts(userPosts);
+      } catch (error) {
+        console.error("Fetch posts error:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
 
   const handleCreatePost = async (content: string) => {
     try {
@@ -43,7 +68,7 @@ export const FeedPage = () => {
       <div className={styles.content}>
         <CreatePostForm onCreate={handleCreatePost} />
 
-        <PostList posts={posts} />
+        {isLoading ? <p>Loading posts...</p> : <PostList posts={posts} />}
       </div>
     </MainLayout>
   );
