@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import { AppRoutes } from "@/shared/config/routes";
 import avatarImage from "@/img/avatar.jpg";
@@ -12,11 +12,22 @@ const navItems = [
 ];
 
 export const Sidebar = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    navigate(AppRoutes.AUTH);
+  };
+
   return (
     <aside className={styles.sidebar}>
       <div className={styles.profileCard}>
         <img className={styles.avatar} src={avatarImage} alt="Victoria Kim" />
+
         <h3 className={styles.userName}>Victoria Kim</h3>
+
         <p className={styles.role}>Frontend Developer</p>
 
         <NavLink to={AppRoutes.PROFILE} className={styles.profileButton}>
@@ -38,7 +49,9 @@ export const Sidebar = () => {
         ))}
       </nav>
 
-      <button className={styles.logoutButton}>Logout</button>
+      <button className={styles.logoutButton} onClick={handleLogout}>
+        Logout
+      </button>
     </aside>
   );
 };
