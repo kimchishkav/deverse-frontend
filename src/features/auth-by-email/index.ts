@@ -1,2 +1,7 @@
-export { login } from "./api/authApi";
-export type { LoginRequest, LoginResponse, AuthUser } from "./model/types";
+export { login, register } from "./api/authApi";
+export type {
+  AuthResponse,
+  AuthUser,
+  LoginRequest,
+  RegisterRequest,
+} from "./model/types";
