@@ -125,3 +125,8 @@
 .followButton:hover {
   background-color: rgba(115, 103, 240, 0.14);
 }
+
+.followButton:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}

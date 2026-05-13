@@ -40,6 +40,8 @@ export const ProfilePage = () => {
         if (currentUser && Number(profileId) !== currentUser.id) {
           const followingUsers = await getFollowing(currentUser.id);
 
+          console.log("followingUsers:", followingUsers);
+
           setIsFollowing(
             followingUsers.some((user) => user.id === Number(profileId)),
           );

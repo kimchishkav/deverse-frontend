@@ -1,8 +1,9 @@
-import { useState, type ChangeEvent } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { searchUsers, type UserProfile } from "@/entities/user";
+import { getFollowing, searchUsers, type UserProfile } from "@/entities/user";
 import avatarImage from "@/img/avatar.jpg";
+import { getStoredUser } from "@/shared/lib/auth";
 import { MainLayout } from "@/widgets/layout";
 
 import styles from "./FriendsPage.module.css";
@@ -17,6 +18,27 @@ export const FriendsPage = () => {
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [followingIds, setFollowingIds] = useState<number[]>([]);
+  const [isFollowLoading, setIsFollowLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchFollowing = async () => {
+      const currentUser = getStoredUser();
+
+      if (!currentUser) {
+        return;
+      }
+
+      try {
+        const followingUsers = await getFollowing(currentUser.id);
+
+        setFollowingIds(followingUsers.map((user) => user.id));
+      } catch (error) {
+        console.error("Fetch following error:", error);
+      }
+    };
+
+    fetchFollowing();
+  }, []);
 
   const handleSearchChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -32,8 +54,13 @@ export const FriendsPage = () => {
       setIsLoading(true);
 
       const foundUsers = await searchUsers(value.trim());
+      const currentUser = getStoredUser();
 
-      setUsers(foundUsers);
+      const filteredUsers = currentUser
+        ? foundUsers.filter((user) => user.id !== currentUser.id)
+        : foundUsers;
+
+      setUsers(filteredUsers);
     } catch (error) {
       console.error("Search users error:", error);
     } finally {
@@ -50,7 +77,13 @@ export const FriendsPage = () => {
   };
 
   const handleToggleFollow = async (userId: number) => {
+    if (isFollowLoading) {
+      return;
+    }
+
     try {
+      setIsFollowLoading(true);
+
       const isFollowing = followingIds.includes(userId);
 
       if (isFollowing) {
@@ -65,6 +98,8 @@ export const FriendsPage = () => {
     } catch (error) {
       console.error("Toggle follow error:", error);
       alert("Не удалось изменить подписку.");
+    } finally {
+      setIsFollowLoading(false);
     }
   };
 
@@ -128,6 +163,7 @@ export const FriendsPage = () => {
                   type="button"
                   className={styles.followButton}
                   onClick={() => handleToggleFollow(user.id)}
+                  disabled={isFollowLoading}
                 >
                   {followingIds.includes(user.id) ? "Unfollow" : "Follow"}
                 </button>
