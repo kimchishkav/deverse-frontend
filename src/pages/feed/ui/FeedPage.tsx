@@ -63,12 +63,20 @@ export const FeedPage = () => {
     }
   };
 
+  const handleDeletePost = (postId: number) => {
+    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+  };
+
   return (
     <MainLayout>
       <div className={styles.content}>
         <CreatePostForm onCreate={handleCreatePost} />
 
-        {isLoading ? <p>Loading posts...</p> : <PostList posts={posts} />}
+        {isLoading ? (
+          <p>Loading posts...</p>
+        ) : (
+          <PostList posts={posts} onDeletePost={handleDeletePost} />
+        )}
       </div>
     </MainLayout>
   );

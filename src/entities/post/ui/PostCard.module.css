@@ -117,3 +117,17 @@
   color: white;
   text-decoration: underline;
 }
+
+.deleteButton {
+  margin-left: auto;
+  border: none;
+  background: transparent;
+  color: #ff9b9b;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.deleteButton:hover {
+  text-decoration: underline;
+}

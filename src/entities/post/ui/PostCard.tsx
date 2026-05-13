@@ -21,11 +21,14 @@ import viewsIcon from "@/assets/svg/viewsIcon.svg";
 
 import styles from "./PostCard.module.css";
 
+import { deletePost } from "@/features/delete-post/api/deletePost";
+
 type Props = {
   post: Post;
+  onDelete?: (postId: number) => void;
 };
 
-export const PostCard = ({ post }: Props) => {
+export const PostCard = ({ post, onDelete }: Props) => {
   const [isLiked, setIsLiked] = useState(Boolean(post.isLiked));
   const [likesCount, setLikesCount] = useState(post.likesCount ?? 0);
   const [isLikeLoading, setIsLikeLoading] = useState(false);
@@ -110,6 +113,20 @@ export const PostCard = ({ post }: Props) => {
     }
   };
 
+  const handleDeletePost = async () => {
+    const isConfirmed = confirm("Удалить этот пост?");
+
+    if (!isConfirmed) return;
+
+    try {
+      await deletePost(post.id);
+      onDelete?.(post.id);
+    } catch (error) {
+      console.error("Delete post error:", error);
+      alert("Не удалось удалить пост.");
+    }
+  };
+
   return (
     <article className={styles.card}>
       <div className={styles.header}>
@@ -120,6 +137,14 @@ export const PostCard = ({ post }: Props) => {
 
           <p className={styles.profession}>{authorProfession}</p>
         </div>
+
+        <button
+          type="button"
+          className={styles.deleteButton}
+          onClick={handleDeletePost}
+        >
+          Delete
+        </button>
       </div>
 
       <div className={styles.content}>
