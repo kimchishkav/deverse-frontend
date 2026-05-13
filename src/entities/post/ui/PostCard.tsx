@@ -23,6 +23,8 @@ import styles from "./PostCard.module.css";
 
 import { deletePost } from "@/features/delete-post/api/deletePost";
 
+import { editPost } from "@/features/edit-post/api/editPost";
+
 type Props = {
   post: Post;
   onDelete?: (postId: number) => void;
@@ -44,6 +46,10 @@ export const PostCard = ({ post, onDelete }: Props) => {
   const authorAvatar = post.author?.avatar ?? "https://i.pravatar.cc/150?img=5";
 
   const navigate = useNavigate();
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedContent, setEditedContent] = useState(post.content);
+  const [postContent, setPostContent] = useState(post.content);
 
   const handleOpenPost = () => {
     navigate(getPostDetailsRoute(post.id));
@@ -127,6 +133,25 @@ export const PostCard = ({ post, onDelete }: Props) => {
     }
   };
 
+  const handleEditPost = async () => {
+    const trimmedContent = editedContent.trim();
+
+    if (!trimmedContent) return;
+
+    try {
+      await editPost({
+        postId: post.id,
+        content: trimmedContent,
+      });
+
+      setPostContent(trimmedContent);
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Edit post error:", error);
+      alert("Не удалось обновить пост.");
+    }
+  };
+
   return (
     <article className={styles.card}>
       <div className={styles.header}>
@@ -145,10 +170,48 @@ export const PostCard = ({ post, onDelete }: Props) => {
         >
           Delete
         </button>
+        <button
+          type="button"
+          className={styles.editButton}
+          onClick={() => setIsEditing(true)}
+        >
+          Edit
+        </button>
       </div>
 
       <div className={styles.content}>
-        <p>{post.content}</p>
+        {isEditing ? (
+          <div className={styles.editContainer}>
+            <textarea
+              className={styles.editTextarea}
+              value={editedContent}
+              onChange={(event) => setEditedContent(event.target.value)}
+            />
+
+            <div className={styles.editActions}>
+              <button
+                type="button"
+                className={styles.saveButton}
+                onClick={handleEditPost}
+              >
+                Save
+              </button>
+
+              <button
+                type="button"
+                className={styles.cancelButton}
+                onClick={() => {
+                  setEditedContent(postContent);
+                  setIsEditing(false);
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        ) : (
+          <p>{postContent}</p>
+        )}
       </div>
 
       <div className={styles.footer}>
