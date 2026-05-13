@@ -1,0 +1,55 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.profileCard {
+  background-color: #3a3d76;
+  border-radius: 20px;
+  overflow: hidden;
+  color: white;
+}
+
+.cover {
+  height: 180px;
+  background: linear-gradient(135deg, #7367f0, #4a4d88);
+}
+
+.profileInfo {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 32px 32px;
+  margin-top: -48px;
+}
+
+.avatar {
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid #3a3d76;
+}
+
+.name {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.profession {
+  margin-top: 6px;
+  font-size: 18px;
+  color: #e0dff7;
+}
+
+.username {
+  margin-top: 6px;
+  font-size: 15px;
+  color: #b9b3ff;
+}
+
+.text {
+  color: white;
+  font-size: 18px;
+}
