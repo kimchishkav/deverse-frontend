@@ -3,6 +3,7 @@ import { useState } from "react";
 import type { Post } from "../model/types";
 
 import {
+  CommentsSection,
   createComment,
   getCommentsByPostId,
   type Comment,
@@ -27,13 +28,13 @@ export const PostCard = ({ post }: Props) => {
   const [isLikeLoading, setIsLikeLoading] = useState(false);
 
   const [comments, setComments] = useState<Comment[]>([]);
+  const [commentsCount, setCommentsCount] = useState(post.commentsCount ?? 0);
   const [isCommentsOpen, setIsCommentsOpen] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [isCommentsLoading, setIsCommentsLoading] = useState(false);
 
   const authorName = post.author?.name ?? "Victoria Kim";
   const authorProfession = post.author?.profession ?? "Frontend Developer";
-
   const authorAvatar = post.author?.avatar ?? "https://i.pravatar.cc/150?img=5";
 
   const handleToggleLike = async () => {
@@ -46,13 +47,11 @@ export const PostCard = ({ post }: Props) => {
         await unlikePost(post.id);
 
         setIsLiked(false);
-
         setLikesCount((prevCount) => Math.max(prevCount - 1, 0));
       } else {
         await likePost(post.id);
 
         setIsLiked(true);
-
         setLikesCount((prevCount) => prevCount + 1);
       }
     } catch (error) {
@@ -73,6 +72,7 @@ export const PostCard = ({ post }: Props) => {
         const postComments = await getCommentsByPostId(post.id);
 
         setComments(postComments);
+        setCommentsCount(postComments.length);
       } catch (error) {
         console.error("Load comments error:", error);
       } finally {
@@ -93,7 +93,7 @@ export const PostCard = ({ post }: Props) => {
       });
 
       setComments((prevComments) => [createdComment, ...prevComments]);
-
+      setCommentsCount((prevCount) => prevCount + 1);
       setCommentText("");
     } catch (error) {
       console.error("Create comment error:", error);
@@ -137,7 +137,7 @@ export const PostCard = ({ post }: Props) => {
           >
             <img className={styles.statIcon} src={commentIcon} alt="Comments" />
 
-            {post.commentsCount ?? comments.length ?? 0}
+            {commentsCount}
           </button>
         </div>
 
@@ -151,38 +151,13 @@ export const PostCard = ({ post }: Props) => {
       </div>
 
       {isCommentsOpen && (
-        <div className={styles.comments}>
-          <div className={styles.commentForm}>
-            <input
-              className={styles.commentInput}
-              value={commentText}
-              onChange={(event) => setCommentText(event.target.value)}
-              placeholder="Write a comment..."
-            />
-
-            <button
-              className={styles.commentButton}
-              type="button"
-              onClick={handleCreateComment}
-            >
-              Send
-            </button>
-          </div>
-
-          {isCommentsLoading ? (
-            <p className={styles.commentText}>Loading comments...</p>
-          ) : (
-            comments.map((comment) => (
-              <div key={comment.id} className={styles.comment}>
-                <p className={styles.commentAuthor}>
-                  {comment.author?.name ?? comment.author?.username ?? "User"}
-                </p>
-
-                <p className={styles.commentText}>{comment.content}</p>
-              </div>
-            ))
-          )}
-        </div>
+        <CommentsSection
+          comments={comments}
+          commentText={commentText}
+          isLoading={isCommentsLoading}
+          onCommentTextChange={setCommentText}
+          onCreateComment={handleCreateComment}
+        />
       )}
     </article>
   );
