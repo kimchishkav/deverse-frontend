@@ -7,12 +7,16 @@ import { MainLayout } from "@/widgets/layout";
 
 import styles from "./FriendsPage.module.css";
 
+import { followUser } from "@/features/follow-user/api/followUser";
+import { unfollowUser } from "@/features/unfollow-user/api/unfollowUser";
+
 export const FriendsPage = () => {
   const navigate = useNavigate();
 
   const [query, setQuery] = useState("");
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [followingIds, setFollowingIds] = useState<number[]>([]);
 
   const handleSearchChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -43,6 +47,25 @@ export const FriendsPage = () => {
     }
 
     return user.username;
+  };
+
+  const handleToggleFollow = async (userId: number) => {
+    try {
+      const isFollowing = followingIds.includes(userId);
+
+      if (isFollowing) {
+        await unfollowUser(userId);
+
+        setFollowingIds((prevIds) => prevIds.filter((id) => id !== userId));
+      } else {
+        await followUser(userId);
+
+        setFollowingIds((prevIds) => [...prevIds, userId]);
+      }
+    } catch (error) {
+      console.error("Toggle follow error:", error);
+      alert("Не удалось изменить подписку.");
+    }
   };
 
   return (
@@ -92,14 +115,23 @@ export const FriendsPage = () => {
                   <p className={styles.username}>@{user.username}</p>
                 </div>
               </div>
+              <div className={styles.actions}>
+                <button
+                  type="button"
+                  className={styles.profileButton}
+                  onClick={() => navigate(`/profile/${user.id}`)}
+                >
+                  View profile
+                </button>
 
-              <button
-                type="button"
-                className={styles.profileButton}
-                onClick={() => navigate(`/profile/${user.id}`)}
-              >
-                View profile
-              </button>
+                <button
+                  type="button"
+                  className={styles.followButton}
+                  onClick={() => handleToggleFollow(user.id)}
+                >
+                  {followingIds.includes(user.id) ? "Unfollow" : "Follow"}
+                </button>
+              </div>
             </div>
           ))}
         </div>
