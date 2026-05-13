@@ -2,6 +2,12 @@ import { useState } from "react";
 
 import type { Post } from "../model/types";
 
+import {
+  createComment,
+  getCommentsByPostId,
+  type Comment,
+} from "@/entities/comment";
+
 import { likePost } from "@/features/like-post/api/likePost";
 import { unlikePost } from "@/features/unlike-post/api/unlikePost";
 
@@ -20,8 +26,14 @@ export const PostCard = ({ post }: Props) => {
   const [likesCount, setLikesCount] = useState(post.likesCount ?? 0);
   const [isLikeLoading, setIsLikeLoading] = useState(false);
 
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [isCommentsOpen, setIsCommentsOpen] = useState(false);
+  const [commentText, setCommentText] = useState("");
+  const [isCommentsLoading, setIsCommentsLoading] = useState(false);
+
   const authorName = post.author?.name ?? "Victoria Kim";
   const authorProfession = post.author?.profession ?? "Frontend Developer";
+
   const authorAvatar = post.author?.avatar ?? "https://i.pravatar.cc/150?img=5";
 
   const handleToggleLike = async () => {
@@ -32,11 +44,15 @@ export const PostCard = ({ post }: Props) => {
 
       if (isLiked) {
         await unlikePost(post.id);
+
         setIsLiked(false);
+
         setLikesCount((prevCount) => Math.max(prevCount - 1, 0));
       } else {
         await likePost(post.id);
+
         setIsLiked(true);
+
         setLikesCount((prevCount) => prevCount + 1);
       }
     } catch (error) {
@@ -47,6 +63,44 @@ export const PostCard = ({ post }: Props) => {
     }
   };
 
+  const handleToggleComments = async () => {
+    setIsCommentsOpen((prev) => !prev);
+
+    if (!isCommentsOpen && comments.length === 0) {
+      try {
+        setIsCommentsLoading(true);
+
+        const postComments = await getCommentsByPostId(post.id);
+
+        setComments(postComments);
+      } catch (error) {
+        console.error("Load comments error:", error);
+      } finally {
+        setIsCommentsLoading(false);
+      }
+    }
+  };
+
+  const handleCreateComment = async () => {
+    const trimmedComment = commentText.trim();
+
+    if (!trimmedComment) return;
+
+    try {
+      const createdComment = await createComment({
+        post_id: post.id,
+        content: trimmedComment,
+      });
+
+      setComments((prevComments) => [createdComment, ...prevComments]);
+
+      setCommentText("");
+    } catch (error) {
+      console.error("Create comment error:", error);
+      alert("Не удалось добавить комментарий.");
+    }
+  };
+
   return (
     <article className={styles.card}>
       <div className={styles.header}>
@@ -54,6 +108,7 @@ export const PostCard = ({ post }: Props) => {
 
         <div className={styles.authorInfo}>
           <h3 className={styles.authorName}>{authorName}</h3>
+
           <p className={styles.profession}>{authorProfession}</p>
         </div>
       </div>
@@ -71,22 +126,64 @@ export const PostCard = ({ post }: Props) => {
             disabled={isLikeLoading}
           >
             <img className={styles.statIcon} src={likeIcon} alt="Likes" />
+
             {likesCount}
           </button>
 
-          <span className={styles.stat}>
+          <button
+            type="button"
+            className={styles.statButton}
+            onClick={handleToggleComments}
+          >
             <img className={styles.statIcon} src={commentIcon} alt="Comments" />
-            {post.commentsCount ?? 0}
-          </span>
+
+            {post.commentsCount ?? comments.length ?? 0}
+          </button>
         </div>
 
         <div className={styles.rightStats}>
           <span className={styles.stat}>
             <img className={styles.statIcon} src={viewsIcon} alt="Views" />
+
             {post.viewsCount ?? 0}
           </span>
         </div>
       </div>
+
+      {isCommentsOpen && (
+        <div className={styles.comments}>
+          <div className={styles.commentForm}>
+            <input
+              className={styles.commentInput}
+              value={commentText}
+              onChange={(event) => setCommentText(event.target.value)}
+              placeholder="Write a comment..."
+            />
+
+            <button
+              className={styles.commentButton}
+              type="button"
+              onClick={handleCreateComment}
+            >
+              Send
+            </button>
+          </div>
+
+          {isCommentsLoading ? (
+            <p className={styles.commentText}>Loading comments...</p>
+          ) : (
+            comments.map((comment) => (
+              <div key={comment.id} className={styles.comment}>
+                <p className={styles.commentAuthor}>
+                  {comment.author?.name ?? comment.author?.username ?? "User"}
+                </p>
+
+                <p className={styles.commentText}>{comment.content}</p>
+              </div>
+            ))
+          )}
+        </div>
+      )}
     </article>
   );
 };
