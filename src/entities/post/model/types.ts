@@ -1,8 +1,9 @@
 export type PostAuthor = {
   id: number;
-  name: string;
-  profession: string;
-  avatar: string;
+  name?: string;
+  username?: string;
+  profession?: string;
+  avatar?: string;
 };
 
 export type Post = {
@@ -13,5 +14,5 @@ export type Post = {
   viewsCount: number;
   createdAt?: string;
   isLiked?: boolean;
-  author: PostAuthor;
+  author?: PostAuthor;
 };

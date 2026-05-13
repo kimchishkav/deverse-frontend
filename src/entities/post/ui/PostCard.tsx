@@ -173,16 +173,26 @@ export const PostCard = ({ post, onDelete }: Props) => {
     }
   };
 
+  const handleOpenAuthorProfile = () => {
+    if (!post.author?.id) return;
+
+    navigate(`/profile/${post.author.id}`);
+  };
+
   return (
     <article className={styles.card}>
       <div className={styles.header}>
         <img className={styles.avatar} src={authorAvatar} alt={authorName} />
 
-        <div className={styles.authorInfo}>
+        <button
+          type="button"
+          className={styles.authorInfoButton}
+          onClick={handleOpenAuthorProfile}
+        >
           <h3 className={styles.authorName}>{authorName}</h3>
 
           <p className={styles.profession}>{authorProfession}</p>
-        </div>
+        </button>
 
         <button
           type="button"

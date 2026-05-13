@@ -4,6 +4,7 @@ import { createPost, type Post } from "@/entities/post";
 import { getUserPosts } from "@/entities/post/api/getUserPosts";
 import { CreatePostForm } from "@/features/create-post";
 import avatarImage from "@/img/avatar.jpg";
+import { getStoredUser } from "@/shared/lib/auth";
 import { MainLayout } from "@/widgets/layout";
 import { PostList } from "@/widgets/post-list";
 
@@ -15,19 +16,29 @@ export const FeedPage = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const userData = localStorage.getItem("user");
+      const currentUser = getStoredUser();
 
-      if (!userData) {
+      if (!currentUser) {
         return;
       }
 
       try {
         setIsLoading(true);
 
-        const user = JSON.parse(userData) as { id: number };
-        const userPosts = await getUserPosts(user.id);
+        const userPosts = await getUserPosts(currentUser.id);
 
-        setPosts(userPosts);
+        const normalizedPosts = userPosts.map((post: Post) => ({
+          ...post,
+          author: post.author ?? {
+            id: currentUser.id,
+            name: currentUser.name ?? currentUser.username ?? "User",
+            username: currentUser.username,
+            profession: currentUser.profession ?? "Developer",
+            avatar: currentUser.avatar ?? avatarImage,
+          },
+        }));
+
+        setPosts(normalizedPosts);
       } catch (error) {
         console.error("Fetch posts error:", error);
       } finally {
@@ -39,6 +50,8 @@ export const FeedPage = () => {
   }, []);
 
   const handleCreatePost = async (content: string) => {
+    const currentUser = getStoredUser();
+
     try {
       const createdPost = await createPost({ content });
 
@@ -49,10 +62,11 @@ export const FeedPage = () => {
         commentsCount: createdPost.commentsCount ?? 0,
         viewsCount: createdPost.viewsCount ?? 0,
         author: createdPost.author ?? {
-          id: 999,
-          name: "Victoria Kim",
-          profession: "Frontend Developer",
-          avatar: avatarImage,
+          id: currentUser?.id ?? 0,
+          name: currentUser?.name ?? currentUser?.username ?? "User",
+          username: currentUser?.username,
+          profession: currentUser?.profession ?? "Developer",
+          avatar: currentUser?.avatar ?? avatarImage,
         },
       };
 

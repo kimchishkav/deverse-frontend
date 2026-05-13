@@ -186,3 +186,15 @@
   background: rgba(255, 255, 255, 0.08);
   color: white;
 }
+
+.authorInfoButton {
+  border: none;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  cursor: pointer;
+  color: inherit;
+  padding: 0;
+}
