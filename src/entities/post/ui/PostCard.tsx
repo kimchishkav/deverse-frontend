@@ -91,8 +91,21 @@ export const PostCard = ({ post, onDelete }: Props) => {
 
         const postComments = await getCommentsByPostId(post.id);
 
-        setComments(postComments);
-        setCommentsCount(postComments.length);
+        const savedUser = localStorage.getItem("user");
+        const currentUser = savedUser ? JSON.parse(savedUser) : null;
+
+        const normalizedComments = postComments.map((comment) => ({
+          ...comment,
+          author: comment.author ?? {
+            id: currentUser?.id,
+            name: currentUser?.name ?? currentUser?.username ?? "User",
+            username: currentUser?.username,
+            avatar: currentUser?.avatar,
+          },
+        }));
+
+        setComments(normalizedComments);
+        setCommentsCount(normalizedComments.length);
       } catch (error) {
         console.error("Load comments error:", error);
       } finally {
@@ -112,7 +125,20 @@ export const PostCard = ({ post, onDelete }: Props) => {
         content: trimmedComment,
       });
 
-      setComments((prevComments) => [createdComment, ...prevComments]);
+      const savedUser = localStorage.getItem("user");
+      const currentUser = savedUser ? JSON.parse(savedUser) : null;
+
+      const normalizedComment = {
+        ...createdComment,
+        author: createdComment.author ?? {
+          id: currentUser?.id,
+          name: currentUser?.name ?? currentUser?.username ?? "User",
+          username: currentUser?.username,
+          avatar: currentUser?.avatar,
+        },
+      };
+
+      setComments((prevComments) => [normalizedComment, ...prevComments]);
       setCommentsCount((prevCount) => prevCount + 1);
       setCommentText("");
     } catch (error) {
@@ -177,6 +203,10 @@ export const PostCard = ({ post, onDelete }: Props) => {
     if (!post.author?.id) return;
 
     navigate(`/profile/${post.author.id}`);
+  };
+
+  const handleOpenCommentAuthorProfile = (userId: number) => {
+    navigate(`/profile/${userId}`);
   };
 
   return (
@@ -294,6 +324,7 @@ export const PostCard = ({ post, onDelete }: Props) => {
           onCommentTextChange={setCommentText}
           onCreateComment={handleCreateComment}
           onDeleteComment={handleDeleteComment}
+          onOpenAuthorProfile={handleOpenCommentAuthorProfile}
         />
       )}
     </article>

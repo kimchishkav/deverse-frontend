@@ -9,6 +9,7 @@ type Props = {
   onCommentTextChange: (value: string) => void;
   onCreateComment: () => void;
   onDeleteComment?: (commentId: number) => void;
+  onOpenAuthorProfile?: (userId: number) => void;
 };
 
 export const CommentsSection = ({
@@ -18,6 +19,7 @@ export const CommentsSection = ({
   onCommentTextChange,
   onCreateComment,
   onDeleteComment,
+  onOpenAuthorProfile,
 }: Props) => {
   return (
     <div className={styles.comments}>
@@ -44,9 +46,17 @@ export const CommentsSection = ({
         comments.map((comment) => (
           <div key={comment.id} className={styles.comment}>
             <div className={styles.commentHeader}>
-              <p className={styles.commentAuthor}>
+              <button
+                type="button"
+                className={styles.commentAuthorButton}
+                onClick={() => {
+                  if (comment.author?.id) {
+                    onOpenAuthorProfile?.(comment.author.id);
+                  }
+                }}
+              >
                 {comment.author?.name ?? comment.author?.username ?? "User"}
-              </p>
+              </button>
 
               <button
                 type="button"

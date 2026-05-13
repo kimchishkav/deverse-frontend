@@ -69,3 +69,18 @@
 .deleteButton:hover {
   text-decoration: underline;
 }
+
+.commentAuthorButton {
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+}
+
+.commentAuthorButton:hover {
+  color: #b9b3ff;
+  text-decoration: underline;
+}
