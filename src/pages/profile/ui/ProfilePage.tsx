@@ -9,6 +9,7 @@ import { MainLayout } from "@/widgets/layout";
 import { followUser } from "@/features/follow-user/api/followUser";
 import { unfollowUser } from "@/features/unfollow-user/api/unfollowUser";
 import { getFollowing } from "@/entities/user";
+import { changeAvatar } from "@/features/change-avatar/api/changeAvatar";
 
 import styles from "./ProfilePage.module.css";
 
@@ -20,6 +21,9 @@ export const ProfilePage = () => {
 
   const [isFollowing, setIsFollowing] = useState(false);
   const [isFollowLoading, setIsFollowLoading] = useState(false);
+
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [isAvatarUploading, setIsAvatarUploading] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -40,8 +44,6 @@ export const ProfilePage = () => {
         if (currentUser && Number(profileId) !== currentUser.id) {
           const followingUsers = await getFollowing(currentUser.id);
 
-          console.log("followingUsers:", followingUsers);
-
           setIsFollowing(
             followingUsers.some((user) => user.id === Number(profileId)),
           );
@@ -61,7 +63,7 @@ export const ProfilePage = () => {
     : (profile?.username ?? "User");
 
   const profession = profile?.profession ?? "Developer";
-  const avatar = profile?.avatar ?? avatarImage;
+  const avatar = profile?.avatar_url ?? profile?.avatar ?? avatarImage;
 
   const handleToggleFollow = async () => {
     if (!profile) return;
@@ -87,6 +89,56 @@ export const ProfilePage = () => {
   const currentUser = getStoredUser();
   const isOwnProfile = profile?.id === currentUser?.id;
 
+  const handleChangeAvatar = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    try {
+      setIsAvatarUploading(true);
+
+      const updatedUser = await changeAvatar(file);
+
+      const newAvatarUrl = updatedUser.avatar_url;
+
+      if (!newAvatarUrl) {
+        throw new Error("Avatar URL not found in response");
+      }
+
+      setAvatarPreview(newAvatarUrl);
+
+      if (profile) {
+        setProfile({
+          ...profile,
+          avatar: newAvatarUrl,
+          avatar_url: newAvatarUrl,
+        });
+      }
+
+      const savedUser = localStorage.getItem("user");
+
+      if (savedUser) {
+        const currentUser = JSON.parse(savedUser);
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            ...currentUser,
+            avatar: newAvatarUrl,
+            avatar_url: newAvatarUrl,
+          }),
+        );
+      }
+    } catch (error) {
+      console.error("Change avatar error:", error);
+      alert("Не удалось обновить аватар.");
+    } finally {
+      setIsAvatarUploading(false);
+    }
+  };
+
   return (
     <MainLayout>
       <div className={styles.page}>
@@ -97,7 +149,26 @@ export const ProfilePage = () => {
             <div className={styles.cover} />
 
             <div className={styles.profileInfo}>
-              <img className={styles.avatar} src={avatar} alt={displayName} />
+              <div className={styles.avatarWrapper}>
+                <img
+                  className={styles.avatar}
+                  src={avatarPreview ?? avatar}
+                  alt={displayName}
+                />
+
+                {isOwnProfile && (
+                  <label className={styles.avatarUploadButton}>
+                    {isAvatarUploading ? "Uploading..." : "Change avatar"}
+
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleChangeAvatar}
+                      hidden
+                    />
+                  </label>
+                )}
+              </div>
 
               <div>
                 <h1 className={styles.name}>{displayName}</h1>

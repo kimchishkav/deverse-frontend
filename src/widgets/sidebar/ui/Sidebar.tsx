@@ -21,7 +21,7 @@ export const Sidebar = () => {
     : (user?.username ?? "User");
 
   const profession = user?.profession ?? "Developer";
-  const avatar = user?.avatar ?? avatarImage;
+  const avatar = user?.avatar_url ?? avatarImage;
 
   const handleLogout = () => {
     localStorage.removeItem("token");

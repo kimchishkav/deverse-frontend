@@ -5,6 +5,8 @@ import { login, register } from "@/features/auth-by-email";
 import { AppRoutes } from "@/shared/config/routes";
 import { Button } from "@/shared/ui/button";
 
+import { getUserById } from "@/entities/user";
+
 import styles from "./AuthPage.module.css";
 
 type AuthMode = "login" | "register";
@@ -67,9 +69,12 @@ export const AuthPage = () => {
     }));
   };
 
-  const saveAuthData = (token: string, user: unknown) => {
+  const saveAuthData = async (token: string, user: { id: number }) => {
     localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(user));
+
+    const fullUser = await getUserById(user.id);
+
+    localStorage.setItem("user", JSON.stringify(fullUser));
   };
 
   const handleLoginSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -80,7 +85,7 @@ export const AuthPage = () => {
     try {
       const response = await login(loginForm);
 
-      saveAuthData(response.token, response.user);
+      await saveAuthData(response.token, response.user);
       navigate(AppRoutes.FEED);
     } catch (requestError) {
       console.error("Login error:", requestError);
@@ -98,7 +103,7 @@ export const AuthPage = () => {
     try {
       const response = await register(registerForm);
 
-      saveAuthData(response.token, response.user);
+      await saveAuthData(response.token, response.user);
       navigate(AppRoutes.FEED);
     } catch (requestError) {
       console.error("Register error:", requestError);

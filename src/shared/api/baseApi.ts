@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const baseApi = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "https://deverse-backend-production.up.railway.app",
   headers: {
     "Content-Type": "application/json",
   },

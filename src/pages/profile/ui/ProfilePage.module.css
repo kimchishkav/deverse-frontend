@@ -73,3 +73,30 @@
 .followButton:hover {
   background-color: #8276ff;
 }
+
+.avatarWrapper {
+  position: relative;
+  width: 112px;
+  height: 112px;
+  flex-shrink: 0;
+}
+
+.avatarUploadButton {
+  position: absolute;
+  left: 50%;
+  bottom: -12px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  border: none;
+  border-radius: 999px;
+  background-color: #7367f0;
+  color: white;
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.avatarUploadButton:hover {
+  background-color: #8276ff;
+}

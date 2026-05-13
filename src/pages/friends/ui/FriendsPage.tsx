@@ -138,7 +138,7 @@ export const FriendsPage = () => {
               <div className={styles.userInfo}>
                 <img
                   className={styles.avatar}
-                  src={user.avatar ?? avatarImage}
+                  src={user.avatar_url ?? user.avatar ?? avatarImage}
                   alt={getDisplayName(user)}
                 />
 

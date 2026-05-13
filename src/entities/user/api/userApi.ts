@@ -10,6 +10,7 @@ export type UserProfile = {
   avatar?: string;
   header?: string;
   role?: string;
+  avatar_url?: string;
 };
 
 export const getUserById = async (

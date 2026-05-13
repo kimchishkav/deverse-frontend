@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000";
+const API_URL = "https://deverse-backend-production.up.railway.app";
 
 export const getUserPosts = async (userId: number) => {
   const token = localStorage.getItem("token");

@@ -6,7 +6,7 @@ export type StoredUser = {
   name?: string;
   surname?: string;
   profession?: string;
-  avatar?: string;
+  avatar_url?: string;
 };
 
 export const getStoredUser = (): StoredUser | null => {
