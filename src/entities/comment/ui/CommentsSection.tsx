@@ -8,6 +8,7 @@ type Props = {
   isLoading: boolean;
   onCommentTextChange: (value: string) => void;
   onCreateComment: () => void;
+  onDeleteComment?: (commentId: number) => void;
 };
 
 export const CommentsSection = ({
@@ -16,6 +17,7 @@ export const CommentsSection = ({
   isLoading,
   onCommentTextChange,
   onCreateComment,
+  onDeleteComment,
 }: Props) => {
   return (
     <div className={styles.comments}>
@@ -41,9 +43,19 @@ export const CommentsSection = ({
       ) : (
         comments.map((comment) => (
           <div key={comment.id} className={styles.comment}>
-            <p className={styles.commentAuthor}>
-              {comment.author?.name ?? comment.author?.username ?? "User"}
-            </p>
+            <div className={styles.commentHeader}>
+              <p className={styles.commentAuthor}>
+                {comment.author?.name ?? comment.author?.username ?? "User"}
+              </p>
+
+              <button
+                type="button"
+                className={styles.deleteButton}
+                onClick={() => onDeleteComment?.(comment.id)}
+              >
+                Delete
+              </button>
+            </div>
 
             <p className={styles.commentText}>{comment.content}</p>
           </div>

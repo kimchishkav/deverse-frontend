@@ -25,6 +25,8 @@ import { deletePost } from "@/features/delete-post/api/deletePost";
 
 import { editPost } from "@/features/edit-post/api/editPost";
 
+import { deleteComment } from "@/features/delete-comment/api/deleteComment";
+
 type Props = {
   post: Post;
   onDelete?: (postId: number) => void;
@@ -152,6 +154,25 @@ export const PostCard = ({ post, onDelete }: Props) => {
     }
   };
 
+  const handleDeleteComment = async (commentId: number) => {
+    const isConfirmed = confirm("Удалить комментарий?");
+
+    if (!isConfirmed) return;
+
+    try {
+      await deleteComment(commentId);
+
+      setComments((prevComments) =>
+        prevComments.filter((comment) => comment.id !== commentId),
+      );
+
+      setCommentsCount((prevCount) => Math.max(prevCount - 1, 0));
+    } catch (error) {
+      console.error("Delete comment error:", error);
+      alert("Не удалось удалить комментарий.");
+    }
+  };
+
   return (
     <article className={styles.card}>
       <div className={styles.header}>
@@ -262,6 +283,7 @@ export const PostCard = ({ post, onDelete }: Props) => {
           isLoading={isCommentsLoading}
           onCommentTextChange={setCommentText}
           onCreateComment={handleCreateComment}
+          onDeleteComment={handleDeleteComment}
         />
       )}
     </article>

@@ -50,3 +50,22 @@
   border-radius: 14px;
   padding: 14px 16px;
 }
+
+.commentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.deleteButton {
+  border: none;
+  background: transparent;
+  color: #ff9b9b;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.deleteButton:hover {
+  text-decoration: underline;
+}
