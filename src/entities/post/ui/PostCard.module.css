@@ -97,3 +97,23 @@
   color: #ff8aa6;
   font-weight: 700;
 }
+
+.rightStats {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.openButton {
+  border: none;
+  background: transparent;
+  color: #b9b3ff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.openButton:hover {
+  color: white;
+  text-decoration: underline;
+}

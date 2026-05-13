@@ -9,6 +9,7 @@ import { FriendsPage } from "@/pages/friends";
 import { ProjectsPage } from "@/pages/projects";
 import { NotFoundPage } from "@/pages/not-found";
 import { ProtectedRoute } from "./ProtectedRoute";
+import { PostDetailsPage } from "@/pages/post-details";
 
 export const AppRouter = () => {
   return (
@@ -55,6 +56,16 @@ export const AppRouter = () => {
           </ProtectedRoute>
         }
       />
+
+      <Route
+        path={AppRoutes.POST_DETAILS}
+        element={
+          <ProtectedRoute>
+            <PostDetailsPage />
+          </ProtectedRoute>
+        }
+      />
+
       <Route path={AppRoutes.NOT_FOUND} element={<NotFoundPage />} />
     </Routes>
   );

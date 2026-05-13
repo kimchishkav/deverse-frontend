@@ -2,6 +2,9 @@ import { useState } from "react";
 
 import type { Post } from "../model/types";
 
+import { useNavigate } from "react-router-dom";
+import { getPostDetailsRoute } from "@/shared/config/routes";
+
 import {
   CommentsSection,
   createComment,
@@ -36,6 +39,12 @@ export const PostCard = ({ post }: Props) => {
   const authorName = post.author?.name ?? "Victoria Kim";
   const authorProfession = post.author?.profession ?? "Frontend Developer";
   const authorAvatar = post.author?.avatar ?? "https://i.pravatar.cc/150?img=5";
+
+  const navigate = useNavigate();
+
+  const handleOpenPost = () => {
+    navigate(getPostDetailsRoute(post.id));
+  };
 
   const handleToggleLike = async () => {
     if (isLikeLoading) return;
@@ -147,6 +156,14 @@ export const PostCard = ({ post }: Props) => {
 
             {post.viewsCount ?? 0}
           </span>
+
+          <button
+            type="button"
+            className={styles.openButton}
+            onClick={handleOpenPost}
+          >
+            View details
+          </button>
         </div>
       </div>
 
