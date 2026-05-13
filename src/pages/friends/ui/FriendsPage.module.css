@@ -1,0 +1,107 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header {
+  background-color: #3a3d76;
+  border-radius: 20px;
+  padding: 24px 28px;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: center;
+}
+
+.title {
+  color: white;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.subtitle {
+  margin-top: 6px;
+  color: #d7d7e8;
+  font-size: 15px;
+}
+
+.searchInput {
+  width: 360px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  outline: none;
+  border-radius: 12px;
+  padding: 13px 16px;
+  background-color: transparent;
+  color: white;
+  font-size: 15px;
+}
+
+.searchInput::placeholder {
+  color: #b9b3ff;
+}
+
+.text {
+  color: white;
+  font-size: 16px;
+}
+
+.usersList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.userCard {
+  background-color: #3a3d76;
+  border-radius: 18px;
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.userName {
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.profession {
+  margin-top: 4px;
+  color: #e0dff7;
+  font-size: 15px;
+}
+
+.username {
+  margin-top: 4px;
+  color: #b9b3ff;
+  font-size: 14px;
+}
+
+.profileButton {
+  border: none;
+  border-radius: 10px;
+  background-color: #7367f0;
+  color: white;
+  padding: 10px 18px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.profileButton:hover {
+  background-color: #8276ff;
+}

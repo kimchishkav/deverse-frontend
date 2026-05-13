@@ -19,3 +19,13 @@ export const getUserById = async (
 
   return response.data;
 };
+
+export const searchUsers = async (query: string): Promise<UserProfile[]> => {
+  const response = await baseApi.get<UserProfile[]>("/user/search", {
+    params: {
+      query,
+    },
+  });
+
+  return response.data;
+};
