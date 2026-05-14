@@ -101,9 +101,15 @@ export const AuthPage = () => {
     setIsLoading(true);
 
     try {
-      const response = await register(registerForm);
+      await register(registerForm);
 
-      await saveAuthData(response.token, response.user);
+      const loginResponse = await login({
+        email: registerForm.email,
+        password: registerForm.password,
+      });
+
+      await saveAuthData(loginResponse.token, loginResponse.user);
+
       navigate(AppRoutes.FEED);
     } catch (requestError) {
       console.error("Register error:", requestError);
@@ -233,6 +239,7 @@ export const AuthPage = () => {
                 value={registerForm.password}
                 onChange={handleRegisterChange}
                 placeholder="Password"
+                minLength={8}
                 required
               />
 

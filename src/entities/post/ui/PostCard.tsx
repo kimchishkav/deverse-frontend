@@ -1,3 +1,4 @@
+import avatarImage from "@/img/avatar.jpg";
 import { useState } from "react";
 
 import type { Post } from "../model/types";
@@ -45,7 +46,7 @@ export const PostCard = ({ post, onDelete }: Props) => {
 
   const authorName = post.author?.name ?? "Victoria Kim";
   const authorProfession = post.author?.profession ?? "Frontend Developer";
-  const authorAvatar = post.author?.avatar ?? "https://i.pravatar.cc/150?img=5";
+  const authorAvatar = post.author?.avatar ?? avatarImage;
 
   const navigate = useNavigate();
 
