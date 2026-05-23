@@ -12,6 +12,7 @@ import { getFollowing } from "@/entities/user";
 import { changeAvatar } from "@/features/change-avatar/api/changeAvatar";
 
 import styles from "./ProfilePage.module.css";
+import { changeHeader } from "@/features/change-header/api/changeHeader";
 
 export const ProfilePage = () => {
   const { id } = useParams();
@@ -24,6 +25,9 @@ export const ProfilePage = () => {
 
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [isAvatarUploading, setIsAvatarUploading] = useState(false);
+
+  const [headerPreview, setHeaderPreview] = useState<string | null>(null);
+  const [isHeaderUploading, setIsHeaderUploading] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -139,6 +143,54 @@ export const ProfilePage = () => {
     }
   };
 
+  const handleChangeHeader = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    try {
+      setIsHeaderUploading(true);
+
+      const updatedUser = await changeHeader(file);
+
+      const newHeaderUrl = updatedUser.header_url;
+
+      if (!newHeaderUrl) {
+        throw new Error("Header URL not found");
+      }
+
+      setHeaderPreview(newHeaderUrl);
+
+      if (profile) {
+        setProfile({
+          ...profile,
+          header_url: newHeaderUrl,
+        });
+      }
+
+      const savedUser = localStorage.getItem("user");
+
+      if (savedUser) {
+        const currentUser = JSON.parse(savedUser);
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            ...currentUser,
+            header_url: newHeaderUrl,
+          }),
+        );
+      }
+    } catch (error) {
+      console.error("Change header error:", error);
+      alert("Не удалось обновить обложку.");
+    } finally {
+      setIsHeaderUploading(false);
+    }
+  };
+
   return (
     <MainLayout>
       <div className={styles.page}>
@@ -146,7 +198,25 @@ export const ProfilePage = () => {
 
         {!isLoading && profile && (
           <section className={styles.profileCard}>
-            <div className={styles.cover} />
+            <div
+              className={styles.cover}
+              style={{
+                backgroundImage: `url(${headerPreview ?? profile.header_url ?? ""})`,
+              }}
+            >
+              {isOwnProfile && (
+                <label className={styles.headerUploadButton}>
+                  {isHeaderUploading ? "Uploading..." : "Change cover"}
+
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleChangeHeader}
+                    hidden
+                  />
+                </label>
+              )}
+            </div>
 
             <div className={styles.profileInfo}>
               <div className={styles.avatarWrapper}>

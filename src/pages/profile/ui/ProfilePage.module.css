@@ -100,3 +100,26 @@
 .avatarUploadButton:hover {
   background-color: #8276ff;
 }
+
+.cover {
+  height: 220px;
+  background: linear-gradient(135deg, #7b61ff 0%, #5f5cff 100%);
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.headerUploadButton {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+
+  padding: 10px 14px;
+  border-radius: 12px;
+
+  cursor: pointer;
+  font-size: 14px;
+}
