@@ -1,43 +1,55 @@
 import { useEffect, useState, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { getFollowing, searchUsers, type UserProfile } from "@/entities/user";
+import {
+  getFollowers,
+  getFollowing,
+  searchUsers,
+  type UserProfile,
+} from "@/entities/user";
 import defaultAvatar from "@/assets/img/acc_default_pic.jpg";
+import { followUser } from "@/features/follow-user/api/followUser";
+import { unfollowUser } from "@/features/unfollow-user/api/unfollowUser";
 import { getStoredUser } from "@/shared/lib/auth";
 import { MainLayout } from "@/widgets/layout";
 
 import styles from "./FriendsPage.module.css";
 
-import { followUser } from "@/features/follow-user/api/followUser";
-import { unfollowUser } from "@/features/unfollow-user/api/unfollowUser";
+type FriendsTab = "search" | "following" | "followers";
 
 export const FriendsPage = () => {
   const navigate = useNavigate();
 
+  const [activeTab, setActiveTab] = useState<FriendsTab>("search");
   const [query, setQuery] = useState("");
   const [users, setUsers] = useState<UserProfile[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [followingUsers, setFollowingUsers] = useState<UserProfile[]>([]);
+  const [followersUsers, setFollowersUsers] = useState<UserProfile[]>([]);
   const [followingIds, setFollowingIds] = useState<number[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [isFollowLoading, setIsFollowLoading] = useState(false);
 
   useEffect(() => {
-    const fetchFollowing = async () => {
+    const fetchFriendsData = async () => {
       const currentUser = getStoredUser();
 
-      if (!currentUser) {
-        return;
-      }
+      if (!currentUser) return;
 
       try {
-        const followingUsers = await getFollowing(currentUser.id);
+        const [following, followers] = await Promise.all([
+          getFollowing(currentUser.id),
+          getFollowers(currentUser.id),
+        ]);
 
-        setFollowingIds(followingUsers.map((user) => user.id));
+        setFollowingUsers(following);
+        setFollowersUsers(followers);
+        setFollowingIds(following.map((user) => user.id));
       } catch (error) {
-        console.error("Fetch following error:", error);
+        console.error("Fetch friends data error:", error);
       }
     };
 
-    fetchFollowing();
+    fetchFriendsData();
   }, []);
 
   const handleSearchChange = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -77,9 +89,7 @@ export const FriendsPage = () => {
   };
 
   const handleToggleFollow = async (userId: number) => {
-    if (isFollowLoading) {
-      return;
-    }
+    if (isFollowLoading) return;
 
     try {
       setIsFollowLoading(true);
@@ -90,10 +100,22 @@ export const FriendsPage = () => {
         await unfollowUser(userId);
 
         setFollowingIds((prevIds) => prevIds.filter((id) => id !== userId));
+
+        setFollowingUsers((prevUsers) =>
+          prevUsers.filter((user) => user.id !== userId),
+        );
       } else {
         await followUser(userId);
 
         setFollowingIds((prevIds) => [...prevIds, userId]);
+
+        const followedUser =
+          users.find((user) => user.id === userId) ??
+          followersUsers.find((user) => user.id === userId);
+
+        if (followedUser) {
+          setFollowingUsers((prevUsers) => [...prevUsers, followedUser]);
+        }
       }
     } catch (error) {
       console.error("Toggle follow error:", error);
@@ -102,6 +124,13 @@ export const FriendsPage = () => {
       setIsFollowLoading(false);
     }
   };
+
+  const displayedUsers =
+    activeTab === "search"
+      ? users
+      : activeTab === "following"
+        ? followingUsers
+        : followersUsers;
 
   return (
     <MainLayout>
@@ -122,18 +151,61 @@ export const FriendsPage = () => {
           />
         </div>
 
-        {isLoading && <p className={styles.text}>Searching...</p>}
+        <div className={styles.tabs}>
+          <button
+            type="button"
+            className={activeTab === "search" ? styles.activeTab : styles.tab}
+            onClick={() => setActiveTab("search")}
+          >
+            Search
+          </button>
 
-        {!isLoading && query.trim().length < 2 && (
+          <button
+            type="button"
+            className={
+              activeTab === "following" ? styles.activeTab : styles.tab
+            }
+            onClick={() => setActiveTab("following")}
+          >
+            Following
+          </button>
+
+          <button
+            type="button"
+            className={
+              activeTab === "followers" ? styles.activeTab : styles.tab
+            }
+            onClick={() => setActiveTab("followers")}
+          >
+            Followers
+          </button>
+        </div>
+
+        {isLoading && activeTab === "search" && (
+          <p className={styles.text}>Searching...</p>
+        )}
+
+        {!isLoading && activeTab === "search" && query.trim().length < 2 && (
           <p className={styles.text}>Type at least 2 characters to search.</p>
         )}
 
-        {!isLoading && query.trim().length >= 2 && users.length === 0 && (
-          <p className={styles.text}>No users found.</p>
+        {!isLoading &&
+          activeTab === "search" &&
+          query.trim().length >= 2 &&
+          displayedUsers.length === 0 && (
+            <p className={styles.text}>No users found.</p>
+          )}
+
+        {activeTab === "following" && displayedUsers.length === 0 && (
+          <p className={styles.text}>You are not following anyone yet.</p>
+        )}
+
+        {activeTab === "followers" && displayedUsers.length === 0 && (
+          <p className={styles.text}>No followers yet.</p>
         )}
 
         <div className={styles.usersList}>
-          {users.map((user) => (
+          {displayedUsers.map((user) => (
             <div key={user.id} className={styles.userCard}>
               <div className={styles.userInfo}>
                 <img
@@ -150,6 +222,7 @@ export const FriendsPage = () => {
                   <p className={styles.username}>@{user.username}</p>
                 </div>
               </div>
+
               <div className={styles.actions}>
                 <button
                   type="button"
