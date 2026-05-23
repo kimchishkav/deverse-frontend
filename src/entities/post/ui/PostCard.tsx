@@ -27,6 +27,7 @@ import { deletePost } from "@/features/delete-post/api/deletePost";
 import { editPost } from "@/features/edit-post/api/editPost";
 
 import { deleteComment } from "@/features/delete-comment/api/deleteComment";
+import { getStoredUser } from "@/shared/lib/auth";
 
 type Props = {
   post: Post;
@@ -50,6 +51,9 @@ export const PostCard = ({ post, onDelete }: Props) => {
     post.author?.avatar_url ?? post.author?.avatar ?? defaultAvatar;
 
   const navigate = useNavigate();
+
+  const currentUser = getStoredUser();
+  const isOwnPost = post.author?.id === currentUser?.id;
 
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(post.content);
@@ -226,20 +230,25 @@ export const PostCard = ({ post, onDelete }: Props) => {
           <p className={styles.profession}>{authorProfession}</p>
         </button>
 
-        <button
-          type="button"
-          className={styles.deleteButton}
-          onClick={handleDeletePost}
-        >
-          Delete
-        </button>
-        <button
-          type="button"
-          className={styles.editButton}
-          onClick={() => setIsEditing(true)}
-        >
-          Edit
-        </button>
+        {isOwnPost && (
+          <>
+            <button
+              type="button"
+              className={styles.deleteButton}
+              onClick={handleDeletePost}
+            >
+              Delete
+            </button>
+
+            <button
+              type="button"
+              className={styles.editButton}
+              onClick={() => setIsEditing(true)}
+            >
+              Edit
+            </button>
+          </>
+        )}
       </div>
 
       <div className={styles.content}>
@@ -327,6 +336,7 @@ export const PostCard = ({ post, onDelete }: Props) => {
           onCreateComment={handleCreateComment}
           onDeleteComment={handleDeleteComment}
           onOpenAuthorProfile={handleOpenCommentAuthorProfile}
+          currentUserId={currentUser?.id}
         />
       )}
     </article>

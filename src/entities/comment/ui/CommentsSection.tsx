@@ -10,6 +10,7 @@ type Props = {
   onCreateComment: () => void;
   onDeleteComment?: (commentId: number) => void;
   onOpenAuthorProfile?: (userId: number) => void;
+  currentUserId?: number;
 };
 
 export const CommentsSection = ({
@@ -20,6 +21,7 @@ export const CommentsSection = ({
   onCreateComment,
   onDeleteComment,
   onOpenAuthorProfile,
+  currentUserId,
 }: Props) => {
   return (
     <div className={styles.comments}>
@@ -58,13 +60,15 @@ export const CommentsSection = ({
                 {comment.author?.name ?? comment.author?.username ?? "User"}
               </button>
 
-              <button
-                type="button"
-                className={styles.deleteButton}
-                onClick={() => onDeleteComment?.(comment.id)}
-              >
-                Delete
-              </button>
+              {comment.author?.id === currentUserId && (
+                <button
+                  type="button"
+                  className={styles.deleteButton}
+                  onClick={() => onDeleteComment?.(comment.id)}
+                >
+                  Delete
+                </button>
+              )}
             </div>
 
             <p className={styles.commentText}>{comment.content}</p>

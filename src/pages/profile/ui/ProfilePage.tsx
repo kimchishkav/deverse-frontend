@@ -57,6 +57,7 @@ export const ProfilePage = () => {
           const postsWithAuthorAvatar = userPosts.map((post: Post) => ({
             ...post,
             author: {
+              id: userData.id,
               ...post.author,
               avatar_url: userData.avatar_url,
               avatar: userData.avatar,

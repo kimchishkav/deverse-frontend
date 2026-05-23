@@ -37,6 +37,7 @@ export const FeedPage = () => {
         const myPostsWithAvatar = myPosts.map((post: Post) => ({
           ...post,
           author: {
+            id: user.id,
             ...post.author,
             avatar_url: user.avatar_url,
             avatar: user.avatar,
@@ -50,6 +51,7 @@ export const FeedPage = () => {
             return posts.map((post: Post) => ({
               ...post,
               author: {
+                id: friend.id,
                 ...post.author,
                 avatar_url: friend.avatar_url,
                 avatar: friend.avatar,
