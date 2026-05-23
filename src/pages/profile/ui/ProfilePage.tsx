@@ -10,9 +10,12 @@ import { followUser } from "@/features/follow-user/api/followUser";
 import { unfollowUser } from "@/features/unfollow-user/api/unfollowUser";
 import { getFollowing } from "@/entities/user";
 import { changeAvatar } from "@/features/change-avatar/api/changeAvatar";
+import { changeHeader } from "@/features/change-header/api/changeHeader";
+import { type Post } from "@/entities/post";
+import { getUserPosts } from "@/entities/post/api/getUserPosts";
+import { PostList } from "@/widgets/post-list";
 
 import styles from "./ProfilePage.module.css";
-import { changeHeader } from "@/features/change-header/api/changeHeader";
 
 export const ProfilePage = () => {
   const { id } = useParams();
@@ -29,6 +32,9 @@ export const ProfilePage = () => {
   const [headerPreview, setHeaderPreview] = useState<string | null>(null);
   const [isHeaderUploading, setIsHeaderUploading] = useState(false);
 
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [isPostsLoading, setIsPostsLoading] = useState(false);
+
   useEffect(() => {
     const fetchProfile = async () => {
       const currentUser = getStoredUser();
@@ -42,6 +48,27 @@ export const ProfilePage = () => {
         const userData = await getUserById(profileId);
 
         setProfile(userData);
+
+        try {
+          setIsPostsLoading(true);
+
+          const userPosts = await getUserPosts(Number(profileId));
+
+          const postsWithAuthorAvatar = userPosts.map((post: Post) => ({
+            ...post,
+            author: {
+              ...post.author,
+              avatar_url: userData.avatar_url,
+              avatar: userData.avatar,
+            },
+          }));
+
+          setPosts(postsWithAuthorAvatar);
+        } catch (error) {
+          console.error("Fetch profile posts error:", error);
+        } finally {
+          setIsPostsLoading(false);
+        }
 
         const currentUser = getStoredUser();
 
@@ -141,6 +168,10 @@ export const ProfilePage = () => {
     } finally {
       setIsAvatarUploading(false);
     }
+  };
+
+  const handleDeletePost = (postId: number) => {
+    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
   };
 
   const handleChangeHeader = async (
@@ -259,6 +290,18 @@ export const ProfilePage = () => {
             </div>
           </section>
         )}
+
+        <section className={styles.postsSection}>
+          <h2 className={styles.postsTitle}>Posts</h2>
+
+          {isPostsLoading ? (
+            <p className={styles.text}>Loading posts...</p>
+          ) : posts.length > 0 ? (
+            <PostList posts={posts} onDeletePost={handleDeletePost} />
+          ) : (
+            <p className={styles.text}>No posts yet.</p>
+          )}
+        </section>
 
         {!isLoading && !profile && (
           <p className={styles.text}>Profile not found</p>

@@ -46,7 +46,8 @@ export const PostCard = ({ post, onDelete }: Props) => {
 
   const authorName = post.author?.name ?? "Victoria Kim";
   const authorProfession = post.author?.profession ?? "Frontend Developer";
-  const authorAvatar = post.author?.avatar ?? defaultAvatar;
+  const authorAvatar =
+    post.author?.avatar_url ?? post.author?.avatar ?? defaultAvatar;
 
   const navigate = useNavigate();
 

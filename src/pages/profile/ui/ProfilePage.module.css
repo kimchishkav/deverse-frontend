@@ -123,3 +123,14 @@
   cursor: pointer;
   font-size: 14px;
 }
+
+.postsSection {
+  margin-top: 28px;
+}
+
+.postsTitle {
+  color: white;
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
