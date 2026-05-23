@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 
-import avatarImage from "@/img/avatar.jpg";
+import defaultAvatar from "@/assets/img/acc_default_pic.jpg";
 import { AppRoutes } from "@/shared/config/routes";
 import { getStoredUser } from "@/shared/lib/auth";
 
@@ -21,7 +21,7 @@ export const Sidebar = () => {
     : (user?.username ?? "User");
 
   const profession = user?.profession ?? "Developer";
-  const avatar = user?.avatar_url ?? avatarImage;
+  const avatar = user?.avatar_url ?? defaultAvatar;
 
   const handleLogout = () => {
     localStorage.removeItem("token");

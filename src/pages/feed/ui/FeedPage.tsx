@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { createPost, type Post } from "@/entities/post";
 import { getUserPosts } from "@/entities/post/api/getUserPosts";
 import { CreatePostForm } from "@/features/create-post";
-import avatarImage from "@/img/avatar.jpg";
+import defaultAvatar from "@/assets/img/acc_default_pic.jpg";
 import { getStoredUser } from "@/shared/lib/auth";
 import { MainLayout } from "@/widgets/layout";
 import { PostList } from "@/widgets/post-list";
@@ -32,9 +32,8 @@ export const FeedPage = () => {
           author: post.author ?? {
             id: currentUser.id,
             name: currentUser.name ?? currentUser.username ?? "User",
-            username: currentUser.username,
             profession: currentUser.profession ?? "Developer",
-            avatar: currentUser.avatar ?? avatarImage,
+            avatar: currentUser.avatar_url ?? defaultAvatar,
           },
         }));
 
@@ -64,9 +63,8 @@ export const FeedPage = () => {
         author: createdPost.author ?? {
           id: currentUser?.id ?? 0,
           name: currentUser?.name ?? currentUser?.username ?? "User",
-          username: currentUser?.username,
           profession: currentUser?.profession ?? "Developer",
-          avatar: currentUser?.avatar ?? avatarImage,
+          avatar: currentUser?.avatar_url ?? defaultAvatar,
         },
       };
 

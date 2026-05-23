@@ -2,7 +2,7 @@ import { useEffect, useState, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { getFollowing, searchUsers, type UserProfile } from "@/entities/user";
-import avatarImage from "@/img/avatar.jpg";
+import defaultAvatar from "@/assets/img/acc_default_pic.jpg";
 import { getStoredUser } from "@/shared/lib/auth";
 import { MainLayout } from "@/widgets/layout";
 
@@ -138,7 +138,7 @@ export const FriendsPage = () => {
               <div className={styles.userInfo}>
                 <img
                   className={styles.avatar}
-                  src={user.avatar_url ?? user.avatar ?? avatarImage}
+                  src={user.avatar_url ?? user.avatar ?? defaultAvatar}
                   alt={getDisplayName(user)}
                 />
 

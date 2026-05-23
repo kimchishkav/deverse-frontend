@@ -1,9 +1,9 @@
 export type PostAuthor = {
   id: number;
-  name?: string;
-  username?: string;
-  profession?: string;
+  name: string;
+  profession: string;
   avatar?: string;
+  avatar_url?: string;
 };
 
 export type Post = {

@@ -1,5 +1,5 @@
 import styles from "./Header.module.css";
-import avatarImage from "@/img/avatar.jpg";
+import defaultAvatar from "@/assets/img/acc_default_pic.jpg";
 
 export const Header = () => {
   return (
@@ -7,7 +7,7 @@ export const Header = () => {
       <div className={styles.logo}>Deverse</div>
 
       <div className={styles.profile}>
-        <img className={styles.avatar} src={avatarImage} alt="User avatar" />
+        <img className={styles.avatar} src={defaultAvatar} alt="User avatar" />
         <span className={styles.name}>Hello, Victoria</span>
       </div>
     </header>

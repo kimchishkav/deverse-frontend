@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { getUserById, type UserProfile } from "@/entities/user";
-import avatarImage from "@/img/avatar.jpg";
+import defaultAvatar from "@/assets/img/acc_default_pic.jpg";
 import { getStoredUser } from "@/shared/lib/auth";
 import { MainLayout } from "@/widgets/layout";
 
@@ -63,7 +63,7 @@ export const ProfilePage = () => {
     : (profile?.username ?? "User");
 
   const profession = profile?.profession ?? "Developer";
-  const avatar = profile?.avatar_url ?? profile?.avatar ?? avatarImage;
+  const avatar = profile?.avatar_url ?? profile?.avatar ?? defaultAvatar;
 
   const handleToggleFollow = async () => {
     if (!profile) return;
