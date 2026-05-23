@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 
 import { createPost, type Post } from "@/entities/post";
 import { getUserPosts } from "@/entities/post/api/getUserPosts";
+import { getFollowing } from "@/entities/user";
 import { CreatePostForm } from "@/features/create-post";
-import defaultAvatar from "@/assets/img/acc_default_pic.jpg";
 import { getStoredUser } from "@/shared/lib/auth";
 import { MainLayout } from "@/widgets/layout";
 import { PostList } from "@/widgets/post-list";
@@ -16,30 +16,62 @@ export const FeedPage = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const currentUser = getStoredUser();
+      const userData = localStorage.getItem("user");
 
-      if (!currentUser) {
+      if (!userData) {
         return;
       }
 
       try {
         setIsLoading(true);
 
-        const userPosts = await getUserPosts(currentUser.id);
+        const user = JSON.parse(userData) as {
+          id: number;
+          avatar?: string;
+          avatar_url?: string;
+        };
 
-        const normalizedPosts = userPosts.map((post: Post) => ({
+        const myPosts = await getUserPosts(user.id);
+        const followingUsers = await getFollowing(user.id);
+
+        const myPostsWithAvatar = myPosts.map((post: Post) => ({
           ...post,
-          author: post.author ?? {
-            id: currentUser.id,
-            name: currentUser.name ?? currentUser.username ?? "User",
-            profession: currentUser.profession ?? "Developer",
-            avatar: currentUser.avatar_url ?? defaultAvatar,
+          author: {
+            ...post.author,
+            avatar_url: user.avatar_url,
+            avatar: user.avatar,
           },
         }));
 
-        setPosts(normalizedPosts);
+        const friendsPostsArrays = await Promise.all(
+          followingUsers.map(async (friend) => {
+            const posts = await getUserPosts(friend.id);
+
+            return posts.map((post: Post) => ({
+              ...post,
+              author: {
+                ...post.author,
+                avatar_url: friend.avatar_url,
+                avatar: friend.avatar,
+              },
+            }));
+          }),
+        );
+
+        const friendsPosts = friendsPostsArrays.flat();
+
+        const allPosts = [...myPostsWithAvatar, ...friendsPosts].sort(
+          (a, b) => {
+            const dateA = new Date(a.createdAt ?? 0).getTime();
+            const dateB = new Date(b.createdAt ?? 0).getTime();
+
+            return dateB - dateA;
+          },
+        );
+
+        setPosts(allPosts);
       } catch (error) {
-        console.error("Fetch posts error:", error);
+        console.error("Fetch feed posts error:", error);
       } finally {
         setIsLoading(false);
       }
@@ -64,7 +96,8 @@ export const FeedPage = () => {
           id: currentUser?.id ?? 0,
           name: currentUser?.name ?? currentUser?.username ?? "User",
           profession: currentUser?.profession ?? "Developer",
-          avatar: currentUser?.avatar_url ?? defaultAvatar,
+          avatar: currentUser?.avatar,
+          avatar_url: currentUser?.avatar_url,
         },
       };
 
