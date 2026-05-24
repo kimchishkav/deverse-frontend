@@ -1,0 +1,97 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header,
+.form,
+.projectCard {
+  background-color: #3a3d76;
+  border-radius: 20px;
+  padding: 24px 28px;
+}
+
+.title {
+  color: white;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.subtitle {
+  margin-top: 8px;
+  color: #d7d7e8;
+  font-size: 15px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.input,
+.textarea {
+  border: none;
+  outline: none;
+  border-radius: 12px;
+  padding: 14px 16px;
+  background-color: #f5f5ff;
+  font-size: 15px;
+}
+
+.textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.createButton {
+  border: none;
+  border-radius: 12px;
+  background-color: #7367f0;
+  color: white;
+  padding: 14px 18px;
+  font-weight: 700;
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+.createButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.text {
+  color: white;
+  font-size: 17px;
+}
+
+.projectList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.projectTitle {
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.description {
+  margin-top: 10px;
+  color: #f3f2ff;
+  line-height: 1.5;
+}
+
+.projectLink {
+  display: inline-block;
+  margin-top: 16px;
+  color: #b9b3ff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.projectLink:hover {
+  text-decoration: underline;
+}
