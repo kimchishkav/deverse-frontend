@@ -95,3 +95,42 @@
 .projectLink:hover {
   text-decoration: underline;
 }
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.editButton,
+.deleteButton,
+.saveButton,
+.cancelButton {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.editButton,
+.saveButton {
+  background-color: #7367f0;
+  color: white;
+}
+
+.deleteButton,
+.cancelButton {
+  background-color: #ff6b81;
+  color: white;
+}
+
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.editForm .input,
+.editForm .textarea {
+  width: 100%;
+}

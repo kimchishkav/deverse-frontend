@@ -2,9 +2,12 @@ import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 
 import {
   createProject,
+  deleteProject,
   getUserProjects,
+  updateProject,
   type Project,
 } from "@/entities/project";
+
 import { getStoredUser } from "@/shared/lib/auth";
 import { MainLayout } from "@/widgets/layout";
 
@@ -27,6 +30,8 @@ export const ProjectsPage = () => {
   const [form, setForm] = useState<ProjectForm>(initialForm);
   const [isLoading, setIsLoading] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
+  const [editingProjectId, setEditingProjectId] = useState<number | null>(null);
+  const [editForm, setEditForm] = useState<ProjectForm>(initialForm);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -92,6 +97,55 @@ export const ProjectsPage = () => {
     }
   };
 
+  const handleDeleteProject = async (projectId: number) => {
+    const isConfirmed = confirm("Удалить проект?");
+
+    if (!isConfirmed) return;
+
+    try {
+      await deleteProject(projectId);
+
+      setProjects((prevProjects) =>
+        prevProjects.filter((project) => project.id !== projectId),
+      );
+    } catch (error) {
+      console.error("Delete project error:", error);
+      alert("Не удалось удалить проект.");
+    }
+  };
+
+  const handleStartEdit = (project: Project) => {
+    setEditingProjectId(project.id);
+
+    setEditForm({
+      title: project.title,
+      description: project.description,
+      url: project.url,
+    });
+  };
+
+  const handleSaveEdit = async (projectId: number) => {
+    try {
+      const updatedProject = await updateProject({
+        projectId,
+        title: editForm.title,
+        description: editForm.description,
+        url: editForm.url,
+      });
+
+      setProjects((prevProjects) =>
+        prevProjects.map((project) =>
+          project.id === projectId ? updatedProject : project,
+        ),
+      );
+
+      setEditingProjectId(null);
+    } catch (error) {
+      console.error("Update project error:", error);
+      alert("Не удалось обновить проект.");
+    }
+  };
+
   return (
     <MainLayout>
       <div className={styles.page}>
@@ -146,18 +200,93 @@ export const ProjectsPage = () => {
           <div className={styles.projectList}>
             {projects.map((project) => (
               <article key={project.id} className={styles.projectCard}>
-                <h2 className={styles.projectTitle}>{project.title}</h2>
+                {editingProjectId === project.id ? (
+                  <div className={styles.editForm}>
+                    <input
+                      className={styles.input}
+                      value={editForm.title}
+                      onChange={(event) =>
+                        setEditForm((prevForm) => ({
+                          ...prevForm,
+                          title: event.target.value,
+                        }))
+                      }
+                    />
 
-                <p className={styles.description}>{project.description}</p>
+                    <textarea
+                      className={styles.textarea}
+                      value={editForm.description}
+                      onChange={(event) =>
+                        setEditForm((prevForm) => ({
+                          ...prevForm,
+                          description: event.target.value,
+                        }))
+                      }
+                    />
 
-                <a
-                  className={styles.projectLink}
-                  href={project.url}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Open project
-                </a>
+                    <input
+                      className={styles.input}
+                      value={editForm.url}
+                      onChange={(event) =>
+                        setEditForm((prevForm) => ({
+                          ...prevForm,
+                          url: event.target.value,
+                        }))
+                      }
+                    />
+
+                    <div className={styles.actions}>
+                      <button
+                        type="button"
+                        className={styles.saveButton}
+                        onClick={() => handleSaveEdit(project.id)}
+                      >
+                        Save
+                      </button>
+
+                      <button
+                        type="button"
+                        className={styles.cancelButton}
+                        onClick={() => setEditingProjectId(null)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <h2 className={styles.projectTitle}>{project.title}</h2>
+
+                    <p className={styles.description}>{project.description}</p>
+
+                    <a
+                      className={styles.projectLink}
+                      href={project.url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Open project
+                    </a>
+
+                    <div className={styles.actions}>
+                      <button
+                        type="button"
+                        className={styles.editButton}
+                        onClick={() => handleStartEdit(project)}
+                      >
+                        Edit
+                      </button>
+
+                      <button
+                        type="button"
+                        className={styles.deleteButton}
+                        onClick={() => handleDeleteProject(project.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </>
+                )}
               </article>
             ))}
           </div>

@@ -134,3 +134,62 @@
   font-weight: 700;
   margin-bottom: 18px;
 }
+
+.profileContent {
+  margin-top: 28px;
+}
+
+.tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.tab,
+.activeTab {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: transparent;
+  color: #d7d5ff;
+  padding: 10px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.activeTab {
+  background: #7464f2;
+  color: white;
+  border-color: #7464f2;
+}
+
+.projectList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.projectCard {
+  background-color: #3a3d76;
+  border-radius: 20px;
+  padding: 24px 28px;
+}
+
+.projectTitle {
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.projectDescription {
+  margin-top: 10px;
+  color: #f3f2ff;
+  line-height: 1.5;
+}
+
+.projectLink {
+  display: inline-block;
+  margin-top: 16px;
+  color: #b9b3ff;
+  font-weight: 700;
+  text-decoration: none;
+}

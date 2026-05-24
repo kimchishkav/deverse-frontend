@@ -14,6 +14,7 @@ import { changeHeader } from "@/features/change-header/api/changeHeader";
 import { type Post } from "@/entities/post";
 import { getUserPosts } from "@/entities/post/api/getUserPosts";
 import { PostList } from "@/widgets/post-list";
+import { getUserProjects, type Project } from "@/entities/project";
 
 import styles from "./ProfilePage.module.css";
 
@@ -34,6 +35,12 @@ export const ProfilePage = () => {
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [isPostsLoading, setIsPostsLoading] = useState(false);
+
+  type ProfileTab = "posts" | "projects";
+
+  const [activeTab, setActiveTab] = useState<ProfileTab>("posts");
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [isProjectsLoading, setIsProjectsLoading] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -69,6 +76,18 @@ export const ProfilePage = () => {
           console.error("Fetch profile posts error:", error);
         } finally {
           setIsPostsLoading(false);
+        }
+
+        try {
+          setIsProjectsLoading(true);
+
+          const userProjects = await getUserProjects(Number(profileId));
+
+          setProjects(userProjects);
+        } catch (error) {
+          console.error("Fetch profile projects error:", error);
+        } finally {
+          setIsProjectsLoading(false);
         }
 
         const currentUser = getStoredUser();
@@ -292,16 +311,62 @@ export const ProfilePage = () => {
           </section>
         )}
 
-        <section className={styles.postsSection}>
-          <h2 className={styles.postsTitle}>Posts</h2>
+        <section className={styles.profileContent}>
+          <div className={styles.tabs}>
+            <button
+              type="button"
+              className={activeTab === "posts" ? styles.activeTab : styles.tab}
+              onClick={() => setActiveTab("posts")}
+            >
+              Posts
+            </button>
 
-          {isPostsLoading ? (
-            <p className={styles.text}>Loading posts...</p>
-          ) : posts.length > 0 ? (
-            <PostList posts={posts} onDeletePost={handleDeletePost} />
-          ) : (
-            <p className={styles.text}>No posts yet.</p>
-          )}
+            <button
+              type="button"
+              className={
+                activeTab === "projects" ? styles.activeTab : styles.tab
+              }
+              onClick={() => setActiveTab("projects")}
+            >
+              Projects
+            </button>
+          </div>
+
+          {activeTab === "posts" &&
+            (isPostsLoading ? (
+              <p className={styles.text}>Loading posts...</p>
+            ) : posts.length > 0 ? (
+              <PostList posts={posts} onDeletePost={handleDeletePost} />
+            ) : (
+              <p className={styles.text}>No posts yet.</p>
+            ))}
+
+          {activeTab === "projects" &&
+            (isProjectsLoading ? (
+              <p className={styles.text}>Loading projects...</p>
+            ) : projects.length > 0 ? (
+              <div className={styles.projectList}>
+                {projects.map((project) => (
+                  <article key={project.id} className={styles.projectCard}>
+                    <h2 className={styles.projectTitle}>{project.title}</h2>
+                    <p className={styles.projectDescription}>
+                      {project.description}
+                    </p>
+
+                    <a
+                      className={styles.projectLink}
+                      href={project.url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Open project
+                    </a>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <p className={styles.text}>No projects yet.</p>
+            ))}
         </section>
 
         {!isLoading && !profile && (
