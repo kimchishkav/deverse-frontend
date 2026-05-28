@@ -28,6 +28,7 @@ import { editPost } from "@/features/edit-post/api/editPost";
 
 import { deleteComment } from "@/features/delete-comment/api/deleteComment";
 import { getStoredUser } from "@/shared/lib/auth";
+import { useToast } from "@/shared/ui/toast";
 
 type Props = {
   post: Post;
@@ -35,6 +36,7 @@ type Props = {
 };
 
 export const PostCard = ({ post, onDelete }: Props) => {
+  const { showToast } = useToast();
   const [isLiked, setIsLiked] = useState(Boolean(post.isLiked));
   const [likesCount, setLikesCount] = useState(post.likesCount ?? 0);
   const [isLikeLoading, setIsLikeLoading] = useState(false);
@@ -82,7 +84,7 @@ export const PostCard = ({ post, onDelete }: Props) => {
       }
     } catch (error) {
       console.error("Toggle like error:", error);
-      alert("Не удалось изменить лайк.");
+      showToast("Не удалось изменить лайк.");
     } finally {
       setIsLikeLoading(false);
     }
@@ -149,7 +151,7 @@ export const PostCard = ({ post, onDelete }: Props) => {
       setCommentText("");
     } catch (error) {
       console.error("Create comment error:", error);
-      alert("Не удалось добавить комментарий.");
+      showToast("Не удалось добавить комментарий.");
     }
   };
 
@@ -163,7 +165,7 @@ export const PostCard = ({ post, onDelete }: Props) => {
       onDelete?.(post.id);
     } catch (error) {
       console.error("Delete post error:", error);
-      alert("Не удалось удалить пост.");
+      showToast("Не удалось удалить пост.");
     }
   };
 
@@ -182,7 +184,7 @@ export const PostCard = ({ post, onDelete }: Props) => {
       setIsEditing(false);
     } catch (error) {
       console.error("Edit post error:", error);
-      alert("Не удалось обновить пост.");
+      showToast("Не удалось обновить пост.");
     }
   };
 
@@ -201,7 +203,7 @@ export const PostCard = ({ post, onDelete }: Props) => {
       setCommentsCount((prevCount) => Math.max(prevCount - 1, 0));
     } catch (error) {
       console.error("Delete comment error:", error);
-      alert("Не удалось удалить комментарий.");
+      showToast("Не удалось удалить комментарий.");
     }
   };
 

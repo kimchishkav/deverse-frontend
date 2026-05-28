@@ -11,6 +11,7 @@ import { getPostById, PostCard, type Post } from "@/entities/post";
 import { getUserById } from "@/entities/user/api/userApi";
 import { AppRoutes } from "@/shared/config/routes";
 import { getStoredUser } from "@/shared/lib/auth";
+import { useToast } from "@/shared/ui/toast";
 import { MainLayout } from "@/widgets/layout";
 
 import styles from "./PostDetailsPage.module.css";
@@ -18,6 +19,7 @@ import styles from "./PostDetailsPage.module.css";
 export const PostDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const [post, setPost] = useState<Post | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
@@ -113,7 +115,7 @@ export const PostDetailsPage = () => {
       setCommentText("");
     } catch (error) {
       console.error("Create comment error:", error);
-      alert("Не удалось добавить комментарий.");
+      showToast("Не удалось добавить комментарий.");
     }
   };
 

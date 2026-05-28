@@ -5,12 +5,14 @@ import { getUserPosts } from "@/entities/post/api/getUserPosts";
 import { getFollowing } from "@/entities/user";
 import { CreatePostForm } from "@/features/create-post";
 import { getStoredUser } from "@/shared/lib/auth";
+import { useToast } from "@/shared/ui/toast";
 import { MainLayout } from "@/widgets/layout";
 import { PostList } from "@/widgets/post-list";
 
 import styles from "./FeedPage.module.css";
 
 export const FeedPage = () => {
+  const { showToast } = useToast();
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -106,7 +108,7 @@ export const FeedPage = () => {
       setPosts((prevPosts) => [newPost, ...prevPosts]);
     } catch (error) {
       console.error("Create post error:", error);
-      alert("Не удалось создать пост. Убедись, что ты залогинена.");
+      showToast("Не удалось создать пост. Убедись, что ты залогинена.");
     }
   };
 

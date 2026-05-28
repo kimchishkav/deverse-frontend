@@ -30,6 +30,23 @@
   gap: 14px;
 }
 
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.inputError {
+  border: 2px solid #ff6b81 !important;
+}
+
+.fieldError {
+  color: #ff9b9b;
+  font-size: 13px;
+  padding-left: 4px;
+  margin: 0;
+}
+
 .input,
 .textarea {
   border: none;

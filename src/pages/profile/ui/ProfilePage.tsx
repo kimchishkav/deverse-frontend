@@ -15,11 +15,13 @@ import { type Post } from "@/entities/post";
 import { getUserPosts } from "@/entities/post/api/getUserPosts";
 import { PostList } from "@/widgets/post-list";
 import { getUserProjects, type Project } from "@/entities/project";
+import { useToast } from "@/shared/ui/toast";
 
 import styles from "./ProfilePage.module.css";
 
 export const ProfilePage = () => {
   const { id } = useParams();
+  const { showToast } = useToast();
 
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -131,7 +133,7 @@ export const ProfilePage = () => {
       }
     } catch (error) {
       console.error("Toggle follow error:", error);
-      alert("Не удалось изменить подписку.");
+      showToast("Не удалось изменить подписку.");
     } finally {
       setIsFollowLoading(false);
     }
@@ -184,7 +186,7 @@ export const ProfilePage = () => {
       }
     } catch (error) {
       console.error("Change avatar error:", error);
-      alert("Не удалось обновить аватар.");
+      showToast("Не удалось обновить аватар.");
     } finally {
       setIsAvatarUploading(false);
     }
@@ -236,7 +238,7 @@ export const ProfilePage = () => {
       }
     } catch (error) {
       console.error("Change header error:", error);
-      alert("Не удалось обновить обложку.");
+      showToast("Не удалось обновить обложку.");
     } finally {
       setIsHeaderUploading(false);
     }
@@ -291,7 +293,7 @@ export const ProfilePage = () => {
                 )}
               </div>
 
-              <div>
+              <div className={styles.profileTextInfo}>
                 <h1 className={styles.name}>{displayName}</h1>
                 <p className={styles.profession}>{profession}</p>
                 <p className={styles.username}>@{profile.username}</p>

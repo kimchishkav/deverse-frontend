@@ -11,6 +11,7 @@ import defaultAvatar from "@/assets/img/acc_default_pic.jpg";
 import { followUser } from "@/features/follow-user/api/followUser";
 import { unfollowUser } from "@/features/unfollow-user/api/unfollowUser";
 import { getStoredUser } from "@/shared/lib/auth";
+import { useToast } from "@/shared/ui/toast";
 import { MainLayout } from "@/widgets/layout";
 
 import styles from "./FriendsPage.module.css";
@@ -19,6 +20,7 @@ type FriendsTab = "search" | "following" | "followers";
 
 export const FriendsPage = () => {
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const [activeTab, setActiveTab] = useState<FriendsTab>("search");
   const [query, setQuery] = useState("");
@@ -119,7 +121,7 @@ export const FriendsPage = () => {
       }
     } catch (error) {
       console.error("Toggle follow error:", error);
-      alert("Не удалось изменить подписку.");
+      showToast("Не удалось изменить подписку.");
     } finally {
       setIsFollowLoading(false);
     }

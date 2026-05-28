@@ -18,10 +18,16 @@
 
 .profileInfo {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 24px;
   padding: 0 32px 32px;
-  margin-top: -48px;
+  margin-top: -56px;
+}
+
+.profileTextInfo {
+  /* cover ends at 220px, profileInfo starts at 164px → need 56px to clear cover */
+  padding-top: 60px;
+  min-width: 0;
 }
 
 .avatar {

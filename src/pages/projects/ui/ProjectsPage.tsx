@@ -12,6 +12,7 @@ import {
 } from "@/entities/project";
 
 import { getStoredUser } from "@/shared/lib/auth";
+import { useToast } from "@/shared/ui/toast";
 import { MainLayout } from "@/widgets/layout";
 
 import styles from "./ProjectsPage.module.css";
@@ -23,6 +24,8 @@ type ProjectForm = {
   description: string;
   url: string;
 };
+
+type FormErrors = Partial<ProjectForm>;
 
 const initialForm: ProjectForm = { title: "", description: "", url: "" };
 
@@ -49,8 +52,31 @@ const extractErrorMessage = (error: unknown): string => {
   return "Произошла ошибка.";
 };
 
+const validateForm = (form: ProjectForm): FormErrors => {
+  const errors: FormErrors = {};
+
+  if (!form.title.trim()) errors.title = "Введи название проекта";
+  if (!form.description.trim()) errors.description = "Введи описание проекта";
+
+  const url = form.url.trim();
+  if (!url) {
+    errors.url = "Введи URL проекта";
+  } else if (!url.startsWith("http://") && !url.startsWith("https://")) {
+    errors.url = "URL должен начинаться с http:// или https://";
+  } else {
+    try {
+      new URL(url);
+    } catch {
+      errors.url = "Введи корректный URL (например: https://github.com/...)";
+    }
+  }
+
+  return errors;
+};
+
 export const ProjectsPage = () => {
   const currentUser = getStoredUser();
+  const { showToast } = useToast();
 
   const [activeTab, setActiveTab] = useState<Tab>("my");
   const [myProjects, setMyProjects] = useState<Project[]>([]);
@@ -59,6 +85,7 @@ export const ProjectsPage = () => {
     currentUser ? loadCollabIds(currentUser.id) : [],
   );
   const [form, setForm] = useState<ProjectForm>(initialForm);
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [applyingId, setApplyingId] = useState<number | null>(null);
@@ -94,29 +121,17 @@ export const ProjectsPage = () => {
   ) => {
     const { name, value } = event.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+    if (formErrors[name as keyof FormErrors]) {
+      setFormErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
   };
 
   const handleCreateProject = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const trimmedTitle = form.title.trim();
-    const trimmedDescription = form.description.trim();
-    const trimmedUrl = form.url.trim();
-
-    if (!trimmedTitle || !trimmedDescription || !trimmedUrl) {
-      alert("Заполни title, description и url.");
-      return;
-    }
-
-    try {
-      new URL(trimmedUrl);
-    } catch {
-      alert("Введи корректный URL (например: https://github.com/username/project)");
-      return;
-    }
-
-    if (!trimmedUrl.startsWith("http://") && !trimmedUrl.startsWith("https://")) {
-      alert("URL должен начинаться с http:// или https://");
+    const errors = validateForm(form);
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
       return;
     }
 
@@ -124,16 +139,18 @@ export const ProjectsPage = () => {
       setIsCreating(true);
 
       const createdProject = await createProject({
-        title: trimmedTitle,
-        description: trimmedDescription,
-        url: trimmedUrl,
+        title: form.title.trim(),
+        description: form.description.trim(),
+        url: form.url.trim(),
       });
 
       setMyProjects((prev) => [createdProject, ...prev]);
       setForm(initialForm);
+      setFormErrors({});
+      showToast("Проект успешно создан!", "success");
     } catch (error) {
       console.error("Create project error:", error);
-      alert(`Не удалось создать проект: ${extractErrorMessage(error)}`);
+      showToast(`Не удалось создать проект: ${extractErrorMessage(error)}`);
     } finally {
       setIsCreating(false);
     }
@@ -145,9 +162,10 @@ export const ProjectsPage = () => {
     try {
       await deleteProject(projectId);
       setMyProjects((prev) => prev.filter((p) => p.id !== projectId));
+      showToast("Проект удалён.", "success");
     } catch (error) {
       console.error("Delete project error:", error);
-      alert("Не удалось удалить проект.");
+      showToast("Не удалось удалить проект.");
     }
   };
 
@@ -174,9 +192,10 @@ export const ProjectsPage = () => {
       );
 
       setEditingProjectId(null);
+      showToast("Проект обновлён.", "success");
     } catch (error) {
       console.error("Update project error:", error);
-      alert("Не удалось обновить проект.");
+      showToast("Не удалось обновить проект.");
     }
   };
 
@@ -191,11 +210,10 @@ export const ProjectsPage = () => {
       success = true;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 400) {
-        // 400 means already applied — treat as success and sync local state
         success = true;
       } else {
         console.error("Apply to project error:", error);
-        alert(`Не удалось подать заявку: ${extractErrorMessage(error)}`);
+        showToast(`Не удалось подать заявку: ${extractErrorMessage(error)}`);
       }
     } finally {
       setApplyingId(null);
@@ -206,6 +224,7 @@ export const ProjectsPage = () => {
       setCollabIds(newIds);
       saveCollabIds(currentUser.id, newIds);
       setActiveTab("my");
+      showToast("Вы теперь коллаборируете!", "success");
     }
   };
 
@@ -215,6 +234,7 @@ export const ProjectsPage = () => {
     const newIds = collabIds.filter((id) => id !== projectId);
     setCollabIds(newIds);
     saveCollabIds(currentUser.id, newIds);
+    showToast("Вы вышли из коллаборации.", "warning");
   };
 
   const myProjectIds = new Set(myProjects.map((p) => p.id));
@@ -270,31 +290,46 @@ export const ProjectsPage = () => {
         {/* ── My Projects tab ── */}
         {activeTab === "my" && (
           <div>
-            <form className={styles.form} onSubmit={handleCreateProject}>
-              <input
-                className={styles.input}
-                name="title"
-                value={form.title}
-                onChange={handleChange}
-                placeholder="Project title"
-              />
+            <form className={styles.form} onSubmit={handleCreateProject} noValidate>
+              <div className={styles.field}>
+                <input
+                  className={`${styles.input} ${formErrors.title ? styles.inputError : ""}`}
+                  name="title"
+                  value={form.title}
+                  onChange={handleChange}
+                  placeholder="Project title"
+                />
+                {formErrors.title && (
+                  <p className={styles.fieldError}>{formErrors.title}</p>
+                )}
+              </div>
 
-              <textarea
-                className={styles.textarea}
-                name="description"
-                value={form.description}
-                onChange={handleChange}
-                placeholder="Project description"
-              />
+              <div className={styles.field}>
+                <textarea
+                  className={`${styles.textarea} ${formErrors.description ? styles.inputError : ""}`}
+                  name="description"
+                  value={form.description}
+                  onChange={handleChange}
+                  placeholder="Project description"
+                />
+                {formErrors.description && (
+                  <p className={styles.fieldError}>{formErrors.description}</p>
+                )}
+              </div>
 
-              <input
-                className={styles.input}
-                name="url"
-                type="url"
-                value={form.url}
-                onChange={handleChange}
-                placeholder="Project URL (https://github.com/...)"
-              />
+              <div className={styles.field}>
+                <input
+                  className={`${styles.input} ${formErrors.url ? styles.inputError : ""}`}
+                  name="url"
+                  type="url"
+                  value={form.url}
+                  onChange={handleChange}
+                  placeholder="Project URL (https://github.com/...)"
+                />
+                {formErrors.url && (
+                  <p className={styles.fieldError}>{formErrors.url}</p>
+                )}
+              </div>
 
               <button
                 type="submit"
