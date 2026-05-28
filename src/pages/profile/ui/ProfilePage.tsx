@@ -63,13 +63,18 @@ export const ProfilePage = () => {
 
           const userPosts = await getUserPosts(Number(profileId));
 
+          const profileDisplayName = userData.name
+            ? `${userData.name} ${userData.surname ?? ""}`.trim()
+            : (userData.username ?? "User");
+
           const postsWithAuthorAvatar = userPosts.map((post: Post) => ({
             ...post,
             author: {
-              id: userData.id,
               ...post.author,
-              avatar_url: userData.avatar_url,
-              avatar: userData.avatar,
+              id: userData.id,
+              name: post.author?.name ?? profileDisplayName,
+              profession: post.author?.profession ?? userData.profession ?? "Developer",
+              avatar_url: userData.avatar_url ?? userData.avatar,
             },
           }));
 
@@ -297,18 +302,18 @@ export const ProfilePage = () => {
                 <h1 className={styles.name}>{displayName}</h1>
                 <p className={styles.profession}>{profession}</p>
                 <p className={styles.username}>@{profile.username}</p>
-              </div>
 
-              {!isOwnProfile && (
-                <button
-                  type="button"
-                  className={styles.followButton}
-                  onClick={handleToggleFollow}
-                  disabled={isFollowLoading}
-                >
-                  {isFollowing ? "Unfollow" : "Follow"}
-                </button>
-              )}
+                {!isOwnProfile && (
+                  <button
+                    type="button"
+                    className={styles.followButton}
+                    onClick={handleToggleFollow}
+                    disabled={isFollowLoading}
+                  >
+                    {isFollowing ? "Unfollow" : "Follow"}
+                  </button>
+                )}
+              </div>
             </div>
           </section>
         )}
