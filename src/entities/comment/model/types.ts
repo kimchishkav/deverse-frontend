@@ -9,7 +9,6 @@ export type CommentAuthor = {
 export type Comment = {
   id: number;
   content: string;
-  post_id?: number;
   postId?: number;
   author?: CommentAuthor;
   createdAt?: string;

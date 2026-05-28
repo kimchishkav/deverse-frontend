@@ -11,6 +11,7 @@ import defaultAvatar from "@/assets/img/acc_default_pic.jpg";
 import { followUser } from "@/features/follow-user/api/followUser";
 import { unfollowUser } from "@/features/unfollow-user/api/unfollowUser";
 import { getStoredUser } from "@/shared/lib/auth";
+import { getDisplayName, getAvatarUrl } from "@/shared/lib/user";
 import { useToast } from "@/shared/ui/toast";
 import { MainLayout } from "@/widgets/layout";
 
@@ -80,14 +81,6 @@ export const FriendsPage = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const getDisplayName = (user: UserProfile) => {
-    if (user.name) {
-      return `${user.name} ${user.surname ?? ""}`.trim();
-    }
-
-    return user.username;
   };
 
   const handleToggleFollow = async (userId: number) => {
@@ -212,7 +205,7 @@ export const FriendsPage = () => {
               <div className={styles.userInfo}>
                 <img
                   className={styles.avatar}
-                  src={user.avatar_url ?? user.avatar ?? defaultAvatar}
+                  src={getAvatarUrl(user) ?? defaultAvatar}
                   alt={getDisplayName(user)}
                 />
 

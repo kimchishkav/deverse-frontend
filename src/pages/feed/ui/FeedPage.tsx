@@ -5,6 +5,7 @@ import { getUserPosts } from "@/entities/post/api/getUserPosts";
 import { getFollowing } from "@/entities/user";
 import { CreatePostForm } from "@/features/create-post";
 import { getStoredUser, type StoredUser } from "@/shared/lib/auth";
+import { getDisplayName, getAvatarUrl } from "@/shared/lib/user";
 import { useToast } from "@/shared/ui/toast";
 import { MainLayout } from "@/widgets/layout";
 import { PostList } from "@/widgets/post-list";
@@ -32,18 +33,14 @@ export const FeedPage = () => {
         const myPosts = await getUserPosts(user.id);
         const followingUsers = await getFollowing(user.id);
 
-        const myDisplayName = user.name
-          ? `${user.name} ${user.surname ?? ""}`.trim()
-          : user.username;
-
         const myPostsWithAvatar = myPosts.map((post: Post) => ({
           ...post,
           author: {
             ...post.author,
             id: user.id,
-            name: post.author?.name ?? myDisplayName,
+            name: post.author?.name ?? getDisplayName(user),
             profession: post.author?.profession ?? user.profession ?? "Developer",
-            avatar_url: user.avatar_url ?? user.avatar,
+            avatar_url: getAvatarUrl(user),
           },
         }));
 
@@ -51,18 +48,14 @@ export const FeedPage = () => {
           followingUsers.map(async (friend) => {
             const posts = await getUserPosts(friend.id);
 
-            const friendDisplayName = friend.name
-              ? `${friend.name} ${friend.surname ?? ""}`.trim()
-              : friend.username;
-
             return posts.map((post: Post) => ({
               ...post,
               author: {
                 ...post.author,
                 id: friend.id,
-                name: post.author?.name ?? friendDisplayName,
+                name: post.author?.name ?? getDisplayName(friend),
                 profession: post.author?.profession ?? friend.profession ?? "Developer",
-                avatar_url: friend.avatar_url ?? friend.avatar,
+                avatar_url: getAvatarUrl(friend),
               },
             }));
           }),

@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import defaultAvatar from "@/assets/img/acc_default_pic.jpg";
 import { AppRoutes } from "@/shared/config/routes";
 import { getStoredUser } from "@/shared/lib/auth";
+import { getDisplayName, getAvatarUrl } from "@/shared/lib/user";
 
 import styles from "./Sidebar.module.css";
 
@@ -16,17 +17,13 @@ export const Sidebar = () => {
   const navigate = useNavigate();
   const user = getStoredUser();
 
-  const displayName = user?.name
-    ? `${user.name} ${user.surname ?? ""}`.trim()
-    : (user?.username ?? "User");
-
+  const displayName = getDisplayName(user);
   const profession = user?.profession ?? "Developer";
-  const avatar = user?.avatar_url ?? defaultAvatar;
+  const avatar = getAvatarUrl(user) ?? defaultAvatar;
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-
     navigate(AppRoutes.AUTH);
   };
 
@@ -34,11 +31,8 @@ export const Sidebar = () => {
     <aside className={styles.sidebar}>
       <div className={styles.profileCard}>
         <img className={styles.avatar} src={avatar} alt={displayName} />
-
         <h3 className={styles.userName}>{displayName}</h3>
-
         <p className={styles.role}>{profession}</p>
-
         <NavLink to={AppRoutes.PROFILE} className={styles.profileButton}>
           View profile
         </NavLink>
@@ -58,11 +52,7 @@ export const Sidebar = () => {
         ))}
       </nav>
 
-      <button
-        type="button"
-        className={styles.logoutButton}
-        onClick={handleLogout}
-      >
+      <button type="button" className={styles.logoutButton} onClick={handleLogout}>
         Logout
       </button>
     </aside>

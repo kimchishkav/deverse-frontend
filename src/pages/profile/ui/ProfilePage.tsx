@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { getUserById, type UserProfile } from "@/entities/user";
 import defaultAvatar from "@/assets/img/acc_default_pic.jpg";
 import { getStoredUser } from "@/shared/lib/auth";
+import { getDisplayName, getAvatarUrl } from "@/shared/lib/user";
 import { MainLayout } from "@/widgets/layout";
 
 import { followUser } from "@/features/follow-user/api/followUser";
@@ -63,9 +64,7 @@ export const ProfilePage = () => {
 
           const userPosts = await getUserPosts(Number(profileId));
 
-          const profileDisplayName = userData.name
-            ? `${userData.name} ${userData.surname ?? ""}`.trim()
-            : (userData.username ?? "User");
+          const profileDisplayName = getDisplayName(userData);
 
           const postsWithAuthorAvatar = userPosts.map((post: Post) => ({
             ...post,
@@ -74,7 +73,7 @@ export const ProfilePage = () => {
               id: userData.id,
               name: post.author?.name ?? profileDisplayName,
               profession: post.author?.profession ?? userData.profession ?? "Developer",
-              avatar_url: userData.avatar_url ?? userData.avatar,
+              avatar_url: getAvatarUrl(userData),
             },
           }));
 
@@ -116,12 +115,9 @@ export const ProfilePage = () => {
     fetchProfile();
   }, [id]);
 
-  const displayName = profile?.name
-    ? `${profile.name} ${profile.surname ?? ""}`.trim()
-    : (profile?.username ?? "User");
-
+  const displayName = getDisplayName(profile);
   const profession = profile?.profession ?? "Developer";
-  const avatar = profile?.avatar_url ?? profile?.avatar ?? defaultAvatar;
+  const avatar = getAvatarUrl(profile) ?? defaultAvatar;
 
   const handleToggleFollow = async () => {
     if (!profile) return;

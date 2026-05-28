@@ -24,7 +24,7 @@ export const getPostsByUserId = async (
 };
 
 export const getPostById = async (postId: number | string): Promise<Post> => {
-  const response = await baseApi.get<Post>(`/post/get/${postId}`);
+  const response = await baseApi.get<Post>(API_ENDPOINTS.POST.GET_BY_ID(postId));
 
   return response.data;
 };

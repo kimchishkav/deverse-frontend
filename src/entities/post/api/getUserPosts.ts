@@ -1,15 +1,7 @@
-import axios from "axios";
-
-const API_URL = "https://deverse-backend-production.up.railway.app";
+import { baseApi } from "@/shared/api/baseApi";
+import { API_ENDPOINTS } from "@/shared/api/endpoints";
 
 export const getUserPosts = async (userId: number) => {
-  const token = localStorage.getItem("token");
-
-  const response = await axios.get(`${API_URL}/post/users/${userId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
+  const response = await baseApi.get(API_ENDPOINTS.POST.GET_BY_USER_ID(userId));
   return response.data;
 };
