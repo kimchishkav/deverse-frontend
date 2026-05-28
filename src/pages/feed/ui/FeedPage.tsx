@@ -4,7 +4,7 @@ import { createPost, type Post } from "@/entities/post";
 import { getUserPosts } from "@/entities/post/api/getUserPosts";
 import { getFollowing } from "@/entities/user";
 import { CreatePostForm } from "@/features/create-post";
-import { getStoredUser } from "@/shared/lib/auth";
+import { getStoredUser, type StoredUser } from "@/shared/lib/auth";
 import { useToast } from "@/shared/ui/toast";
 import { MainLayout } from "@/widgets/layout";
 import { PostList } from "@/widgets/post-list";
@@ -27,22 +27,23 @@ export const FeedPage = () => {
       try {
         setIsLoading(true);
 
-        const user = JSON.parse(userData) as {
-          id: number;
-          avatar?: string;
-          avatar_url?: string;
-        };
+        const user = JSON.parse(userData) as StoredUser;
 
         const myPosts = await getUserPosts(user.id);
         const followingUsers = await getFollowing(user.id);
 
+        const myDisplayName = user.name
+          ? `${user.name} ${user.surname ?? ""}`.trim()
+          : user.username;
+
         const myPostsWithAvatar = myPosts.map((post: Post) => ({
           ...post,
           author: {
-            id: user.id,
             ...post.author,
-            avatar_url: user.avatar_url,
-            avatar: user.avatar,
+            id: user.id,
+            name: post.author?.name ?? myDisplayName,
+            profession: post.author?.profession ?? user.profession ?? "Developer",
+            avatar_url: user.avatar_url ?? user.avatar,
           },
         }));
 
@@ -50,13 +51,18 @@ export const FeedPage = () => {
           followingUsers.map(async (friend) => {
             const posts = await getUserPosts(friend.id);
 
+            const friendDisplayName = friend.name
+              ? `${friend.name} ${friend.surname ?? ""}`.trim()
+              : friend.username;
+
             return posts.map((post: Post) => ({
               ...post,
               author: {
-                id: friend.id,
                 ...post.author,
-                avatar_url: friend.avatar_url,
-                avatar: friend.avatar,
+                id: friend.id,
+                name: post.author?.name ?? friendDisplayName,
+                profession: post.author?.profession ?? friend.profession ?? "Developer",
+                avatar_url: friend.avatar_url ?? friend.avatar,
               },
             }));
           }),

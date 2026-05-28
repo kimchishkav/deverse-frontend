@@ -47,8 +47,8 @@ export const PostCard = ({ post, onDelete }: Props) => {
   const [commentText, setCommentText] = useState("");
   const [isCommentsLoading, setIsCommentsLoading] = useState(false);
 
-  const authorName = post.author?.name ?? "Victoria Kim";
-  const authorProfession = post.author?.profession ?? "Frontend Developer";
+  const authorName = post.author?.name ?? post.author?.id?.toString() ?? "User";
+  const authorProfession = post.author?.profession ?? "Developer";
   const authorAvatar =
     post.author?.avatar_url ?? post.author?.avatar ?? defaultAvatar;
 
