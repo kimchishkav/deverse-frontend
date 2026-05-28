@@ -1,4 +1,5 @@
 import type { Comment } from "../model/types";
+import defaultAvatar from "@/assets/img/acc_default_pic.jpg";
 
 import styles from "./CommentsSection.module.css";
 
@@ -45,35 +46,59 @@ export const CommentsSection = ({
       {isLoading ? (
         <p className={styles.commentText}>Loading comments...</p>
       ) : (
-        comments.map((comment) => (
-          <div key={comment.id} className={styles.comment}>
-            <div className={styles.commentHeader}>
-              <button
-                type="button"
-                className={styles.commentAuthorButton}
-                onClick={() => {
-                  if (comment.author?.id) {
-                    onOpenAuthorProfile?.(comment.author.id);
-                  }
-                }}
-              >
-                {comment.author?.name ?? comment.author?.username ?? "User"}
-              </button>
+        comments.map((comment) => {
+          const authorName =
+            comment.author?.name ?? comment.author?.username ?? "User";
+          const authorUsername = comment.author?.username;
+          const avatarSrc =
+            comment.author?.avatar_url ?? comment.author?.avatar ?? defaultAvatar;
 
-              {comment.author?.id === currentUserId && (
+          return (
+            <div key={comment.id} className={styles.comment}>
+              <div className={styles.commentHeader}>
                 <button
                   type="button"
-                  className={styles.deleteButton}
-                  onClick={() => onDeleteComment?.(comment.id)}
+                  className={styles.commentAuthorButton}
+                  onClick={() => {
+                    if (comment.author?.id) {
+                      onOpenAuthorProfile?.(comment.author.id);
+                    }
+                  }}
                 >
-                  Delete
-                </button>
-              )}
-            </div>
+                  <img
+                    className={styles.commentAvatar}
+                    src={avatarSrc}
+                    alt={authorName}
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = defaultAvatar;
+                    }}
+                  />
 
-            <p className={styles.commentText}>{comment.content}</p>
-          </div>
-        ))
+                  <div className={styles.commentAuthorInfo}>
+                    <span className={styles.commentAuthorName}>{authorName}</span>
+                    {authorUsername && (
+                      <span className={styles.commentAuthorUsername}>
+                        @{authorUsername}
+                      </span>
+                    )}
+                  </div>
+                </button>
+
+                {comment.author?.id === currentUserId && (
+                  <button
+                    type="button"
+                    className={styles.deleteButton}
+                    onClick={() => onDeleteComment?.(comment.id)}
+                  >
+                    Delete
+                  </button>
+                )}
+              </div>
+
+              <p className={styles.commentText}>{comment.content}</p>
+            </div>
+          );
+        })
       )}
     </div>
   );

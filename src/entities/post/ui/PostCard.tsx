@@ -106,7 +106,7 @@ export const PostCard = ({ post, onDelete }: Props) => {
             id: currentUser?.id,
             name: currentUser?.name ?? currentUser?.username ?? "User",
             username: currentUser?.username,
-            avatar: currentUser?.avatar,
+            avatar_url: currentUser?.avatar_url ?? currentUser?.avatar,
           },
         }));
 

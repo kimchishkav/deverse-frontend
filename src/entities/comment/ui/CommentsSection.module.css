@@ -73,14 +73,43 @@
 .commentAuthorButton {
   border: none;
   background: transparent;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.commentAuthorButton:hover .commentAuthorName {
+  color: #b9b3ff;
+  text-decoration: underline;
+}
+
+.commentAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.commentAuthorInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.commentAuthorName {
   color: #ffffff;
   font-size: 15px;
   font-weight: 700;
-  cursor: pointer;
-  padding: 0;
+  line-height: 1;
 }
 
-.commentAuthorButton:hover {
-  color: #b9b3ff;
-  text-decoration: underline;
+.commentAuthorUsername {
+  color: #9b96cc;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1;
 }
