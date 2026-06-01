@@ -62,12 +62,15 @@
 }
 
 .link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   color: white;
   text-decoration: none;
-  font-size: 17px;
-  padding: 8px 6px;
-  border-radius: 10px;
-  transition: 0.2s;
+  font-size: 16px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  transition: background 0.15s, color 0.15s;
 }
 
 .link:hover {
@@ -77,16 +80,39 @@
 .active {
   color: #8b7cff;
   font-weight: 700;
+  background-color: rgba(139, 124, 255, 0.12);
+}
+
+.active .linkIcon {
+  opacity: 1;
+}
+
+.linkIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  opacity: 0.85;
 }
 
 .logoutButton {
-  margin-top: auto;
-  height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   background: transparent;
   color: white;
-  font-size: 17px;
+  font-size: 16px;
   text-align: left;
   cursor: pointer;
+  transition: background 0.15s;
+}
+
+.logoutButton:hover {
+  background-color: rgba(255, 255, 255, 0.08);
 }
