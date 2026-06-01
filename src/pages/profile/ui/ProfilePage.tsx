@@ -12,6 +12,7 @@ import { unfollowUser } from "@/features/unfollow-user/api/unfollowUser";
 import { getFollowing } from "@/entities/user";
 import { changeAvatar } from "@/features/change-avatar/api/changeAvatar";
 import { changeHeader } from "@/features/change-header/api/changeHeader";
+import { EditProfileModal } from "@/features/edit-profile";
 import { type Post } from "@/entities/post";
 import { getUserPosts } from "@/entities/post/api/getUserPosts";
 import { PostList } from "@/widgets/post-list";
@@ -35,6 +36,8 @@ export const ProfilePage = () => {
 
   const [headerPreview, setHeaderPreview] = useState<string | null>(null);
   const [isHeaderUploading, setIsHeaderUploading] = useState(false);
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [isPostsLoading, setIsPostsLoading] = useState(false);
@@ -197,6 +200,27 @@ export const ProfilePage = () => {
     setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
   };
 
+  const handleSaveProfile = (updated: UserProfile) => {
+    setProfile(updated);
+    setIsEditModalOpen(false);
+
+    // sync localStorage so Header/Sidebar update immediately
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      const current = JSON.parse(savedUser);
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          ...current,
+          name: updated.name,
+          surname: updated.surname,
+          username: updated.username,
+          profession: updated.profession,
+        }),
+      );
+    }
+  };
+
   const handleChangeHeader = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -299,6 +323,16 @@ export const ProfilePage = () => {
                 <p className={styles.profession}>{profession}</p>
                 <p className={styles.username}>@{profile.username}</p>
 
+                {isOwnProfile && (
+                  <button
+                    type="button"
+                    className={styles.editProfileButton}
+                    onClick={() => setIsEditModalOpen(true)}
+                  >
+                    Edit profile
+                  </button>
+                )}
+
                 {!isOwnProfile && (
                   <button
                     type="button"
@@ -376,6 +410,14 @@ export const ProfilePage = () => {
           <p className={styles.text}>Profile not found</p>
         )}
       </div>
+
+      {isEditModalOpen && profile && (
+        <EditProfileModal
+          profile={profile}
+          onSave={handleSaveProfile}
+          onClose={() => setIsEditModalOpen(false)}
+        />
+      )}
     </MainLayout>
   );
 };

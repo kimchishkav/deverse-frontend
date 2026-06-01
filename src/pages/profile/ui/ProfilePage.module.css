@@ -60,7 +60,8 @@
   font-size: 18px;
 }
 
-.followButton {
+.followButton,
+.editProfileButton {
   margin-top: 14px;
   border: none;
   border-radius: 10px;
@@ -76,8 +77,21 @@
   cursor: not-allowed;
 }
 
-.followButton:hover {
+.followButton:hover,
+.editProfileButton:hover {
   background-color: #8276ff;
+}
+
+.editProfileButton {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #d7d5ff;
+}
+
+.editProfileButton:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
 }
 
 .avatarWrapper {
