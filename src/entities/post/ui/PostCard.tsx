@@ -27,6 +27,7 @@ import { deletePost } from "@/features/delete-post/api/deletePost";
 import { editPost } from "@/features/edit-post/api/editPost";
 
 import { deleteComment } from "@/features/delete-comment/api/deleteComment";
+import { improveGrammar } from "@/features/improve-grammar/api/improveGrammar";
 import { getStoredUser } from "@/shared/lib/auth";
 import { useToast } from "@/shared/ui/toast";
 
@@ -60,6 +61,7 @@ export const PostCard = ({ post, onDelete }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(post.content);
   const [postContent, setPostContent] = useState(post.content);
+  const [isImproving, setIsImproving] = useState(false);
 
   const handleOpenPost = () => {
     navigate(getPostDetailsRoute(post.id));
@@ -263,6 +265,25 @@ export const PostCard = ({ post, onDelete }: Props) => {
             />
 
             <div className={styles.editActions}>
+              <button
+                type="button"
+                className={styles.improveButton}
+                disabled={isImproving || !editedContent.trim()}
+                onClick={async () => {
+                  try {
+                    setIsImproving(true);
+                    const improved = await improveGrammar(editedContent.trim());
+                    setEditedContent(improved);
+                  } catch {
+                    showToast("Failed to improve. Try again.");
+                  } finally {
+                    setIsImproving(false);
+                  }
+                }}
+              >
+                {isImproving ? "Improving..." : "Improve"}
+              </button>
+
               <button
                 type="button"
                 className={styles.saveButton}

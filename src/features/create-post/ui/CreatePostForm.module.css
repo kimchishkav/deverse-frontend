@@ -15,5 +15,36 @@
 
 .actions {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
+  gap: 10px;
+}
+
+.improveButton {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  background: transparent;
+  color: #d7d5ff;
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.improveButton:hover:not(:disabled) {
+  background: rgba(115, 103, 240, 0.2);
+  border-color: #7367f0;
+  color: white;
+}
+
+.improveButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #ff6b81;
+  font-size: 14px;
+  font-weight: 500;
 }
