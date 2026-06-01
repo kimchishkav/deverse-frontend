@@ -1,9 +1,9 @@
 .card {
   width: 100%;
-  background-color: #3a3d76;
+  background-color: var(--bg-card);
   border-radius: 20px;
   padding: 24px 28px;
-  color: white;
+  color: var(--text-primary);
 }
 
 .header {
@@ -35,7 +35,7 @@
 
 .profession {
   font-size: 16px;
-  color: #e0dff7;
+  color: var(--text-secondary);
   line-height: 1.2;
 }
 
@@ -61,6 +61,7 @@
 .rightStats {
   display: flex;
   align-items: center;
+  gap: 18px;
 }
 
 .stat {
@@ -68,7 +69,7 @@
   align-items: center;
   gap: 8px;
   font-size: 18px;
-  color: #f3f2ff;
+  color: var(--text-primary);
 }
 
 .statIcon {
@@ -79,7 +80,7 @@
 .statButton {
   border: none;
   background: transparent;
-  color: #f3f2ff;
+  color: var(--text-primary);
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -94,27 +95,21 @@
 }
 
 .liked {
-  color: #ff8aa6;
+  color: var(--like);
   font-weight: 700;
-}
-
-.rightStats {
-  display: flex;
-  align-items: center;
-  gap: 18px;
 }
 
 .openButton {
   border: none;
   background: transparent;
-  color: #b9b3ff;
+  color: var(--text-muted);
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
 }
 
 .openButton:hover {
-  color: white;
+  color: var(--text-primary);
   text-decoration: underline;
 }
 
@@ -122,7 +117,7 @@
   margin-left: auto;
   border: none;
   background: transparent;
-  color: #ff9b9b;
+  color: var(--error-text);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -135,7 +130,7 @@
 .editButton {
   border: none;
   background: transparent;
-  color: #b9b3ff;
+  color: var(--text-muted);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -159,8 +154,8 @@
   resize: vertical;
   padding: 14px;
   font-size: 16px;
-  background: rgba(255, 255, 255, 0.08);
-  color: white;
+  background: var(--bg-input);
+  color: var(--text-primary);
 }
 
 .editActions {
@@ -170,21 +165,22 @@
 }
 
 .improveButton {
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--border-subtle);
   border-radius: 10px;
   background: transparent;
-  color: #d7d5ff;
+  color: var(--text-secondary);
   padding: 10px 16px;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   margin-right: auto;
+  transition: background 0.15s, border-color 0.15s;
 }
 
 .improveButton:hover:not(:disabled) {
-  background: rgba(115, 103, 240, 0.2);
-  border-color: #7367f0;
-  color: white;
+  background: rgba(115, 103, 240, 0.15);
+  border-color: var(--accent);
+  color: var(--text-primary);
 }
 
 .improveButton:disabled {
@@ -202,13 +198,13 @@
 }
 
 .saveButton {
-  background: #7c6cff;
+  background: var(--accent);
   color: white;
 }
 
 .cancelButton {
-  background: rgba(255, 255, 255, 0.08);
-  color: white;
+  background: var(--bg-input);
+  color: var(--text-primary);
 }
 
 .authorInfoButton {

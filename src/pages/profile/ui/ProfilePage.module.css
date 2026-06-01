@@ -5,15 +5,18 @@
 }
 
 .profileCard {
-  background-color: #3a3d76;
+  background-color: var(--bg-card);
   border-radius: 20px;
   overflow: hidden;
-  color: white;
+  color: var(--text-primary);
 }
 
 .cover {
-  height: 180px;
-  background: linear-gradient(135deg, #7367f0, #4a4d88);
+  height: 220px;
+  background: linear-gradient(135deg, #7b61ff 0%, #5f5cff 100%);
+  background-size: cover;
+  background-position: center;
+  position: relative;
 }
 
 .profileInfo {
@@ -25,9 +28,15 @@
 }
 
 .profileTextInfo {
-  /* cover ends at 220px, profileInfo starts at 164px → need 56px to clear cover */
   padding-top: 60px;
   min-width: 0;
+}
+
+.avatarWrapper {
+  position: relative;
+  width: 112px;
+  height: 112px;
+  flex-shrink: 0;
 }
 
 .avatar {
@@ -35,7 +44,7 @@
   height: 112px;
   border-radius: 50%;
   object-fit: cover;
-  border: 5px solid #3a3d76;
+  border: 5px solid var(--bg-card);
 }
 
 .name {
@@ -46,17 +55,17 @@
 .profession {
   margin-top: 6px;
   font-size: 18px;
-  color: #e0dff7;
+  color: var(--text-secondary);
 }
 
 .username {
   margin-top: 6px;
   font-size: 15px;
-  color: #b9b3ff;
+  color: var(--text-muted);
 }
 
 .text {
-  color: white;
+  color: var(--text-primary);
   font-size: 18px;
 }
 
@@ -65,11 +74,12 @@
   margin-top: 14px;
   border: none;
   border-radius: 10px;
-  background-color: #7367f0;
+  background-color: var(--accent);
   color: white;
   padding: 10px 20px;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.15s;
 }
 
 .followButton:disabled {
@@ -79,26 +89,19 @@
 
 .followButton:hover,
 .editProfileButton:hover {
-  background-color: #8276ff;
+  background-color: var(--accent-hover);
 }
 
 .editProfileButton {
   background-color: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: #d7d5ff;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
 }
 
 .editProfileButton:hover {
-  background-color: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.5);
-  color: white;
-}
-
-.avatarWrapper {
-  position: relative;
-  width: 112px;
-  height: 112px;
-  flex-shrink: 0;
+  background-color: var(--bg-hover);
+  border-color: var(--border-input);
+  color: var(--text-primary);
 }
 
 .avatarUploadButton {
@@ -109,39 +112,30 @@
   white-space: nowrap;
   border: none;
   border-radius: 999px;
-  background-color: #7367f0;
+  background-color: var(--accent);
   color: white;
   padding: 7px 12px;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.15s;
 }
 
 .avatarUploadButton:hover {
-  background-color: #8276ff;
-}
-
-.cover {
-  height: 220px;
-  background: linear-gradient(135deg, #7b61ff 0%, #5f5cff 100%);
-  background-size: cover;
-  background-position: center;
-  position: relative;
+  background-color: var(--accent-hover);
 }
 
 .headerUploadButton {
   position: absolute;
   top: 16px;
   right: 16px;
-
   background: rgba(0, 0, 0, 0.5);
   color: white;
-
   padding: 10px 14px;
   border-radius: 12px;
-
   cursor: pointer;
   font-size: 14px;
+  border: none;
 }
 
 .postsSection {
@@ -149,7 +143,7 @@
 }
 
 .postsTitle {
-  color: white;
+  color: var(--text-primary);
   font-size: 26px;
   font-weight: 700;
   margin-bottom: 18px;
@@ -167,19 +161,24 @@
 
 .tab,
 .activeTab {
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid var(--border-subtle);
   background: transparent;
-  color: #d7d5ff;
+  color: var(--text-secondary);
   padding: 10px 18px;
   border-radius: 12px;
   cursor: pointer;
   font-weight: 600;
+  transition: background 0.15s;
+}
+
+.tab:hover {
+  background: var(--bg-hover);
 }
 
 .activeTab {
-  background: #7464f2;
+  background: var(--accent);
   color: white;
-  border-color: #7464f2;
+  border-color: var(--accent);
 }
 
 .projectList {
@@ -189,27 +188,32 @@
 }
 
 .projectCard {
-  background-color: #3a3d76;
+  background-color: var(--bg-card);
   border-radius: 20px;
   padding: 24px 28px;
+  border: 1px solid var(--border);
 }
 
 .projectTitle {
-  color: white;
+  color: var(--text-primary);
   font-size: 22px;
   font-weight: 700;
 }
 
 .projectDescription {
   margin-top: 10px;
-  color: #f3f2ff;
+  color: var(--text-secondary);
   line-height: 1.5;
 }
 
 .projectLink {
   display: inline-block;
   margin-top: 16px;
-  color: #b9b3ff;
+  color: var(--text-muted);
   font-weight: 700;
   text-decoration: none;
+}
+
+.projectLink:hover {
+  text-decoration: underline;
 }

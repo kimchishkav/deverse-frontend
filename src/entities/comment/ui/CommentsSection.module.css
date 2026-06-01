@@ -1,6 +1,6 @@
 .comments {
   margin-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 1px solid var(--border-subtle);
   padding-top: 18px;
   display: flex;
   flex-direction: column;
@@ -18,35 +18,26 @@
   outline: none;
   border-radius: 12px;
   padding: 12px 14px;
-  background-color: #f5f5ff;
-  color: #222;
+  background-color: var(--bg-input-solid);
+  color: var(--text-on-input);
 }
 
 .commentButton {
   border: none;
   border-radius: 12px;
   padding: 0 18px;
-  background-color: #7367f0;
+  background-color: var(--accent);
   color: white;
   font-weight: 600;
   cursor: pointer;
 }
 
-.commentAuthor {
-  color: #ffffff;
-  font-size: 15px;
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-
-.commentText {
-  color: #d7d7e8;
-  font-size: 14px;
-  line-height: 1.4;
+.commentButton:hover {
+  background-color: var(--accent-hover);
 }
 
 .comment {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--bg-comment);
   border-radius: 14px;
   padding: 14px 16px;
 }
@@ -55,19 +46,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.deleteButton {
-  border: none;
-  background: transparent;
-  color: #ff9b9b;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.deleteButton:hover {
-  text-decoration: underline;
 }
 
 .commentAuthorButton {
@@ -82,7 +60,7 @@
 }
 
 .commentAuthorButton:hover .commentAuthorName {
-  color: #b9b3ff;
+  color: var(--text-muted);
   text-decoration: underline;
 }
 
@@ -101,15 +79,35 @@
 }
 
 .commentAuthorName {
-  color: #ffffff;
+  color: var(--text-primary);
   font-size: 15px;
   font-weight: 700;
   line-height: 1;
 }
 
 .commentAuthorUsername {
-  color: #9b96cc;
+  color: var(--text-dimmed);
   font-size: 12px;
   font-weight: 400;
   line-height: 1;
+}
+
+.commentText {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.4;
+  margin-top: 8px;
+}
+
+.deleteButton {
+  border: none;
+  background: transparent;
+  color: var(--error-text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.deleteButton:hover {
+  text-decoration: underline;
 }

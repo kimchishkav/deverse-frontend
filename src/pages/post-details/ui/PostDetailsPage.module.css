@@ -8,12 +8,18 @@
   width: fit-content;
   border: none;
   background: transparent;
-  color: white;
+  color: var(--text-primary);
   font-size: 16px;
   cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.15s;
+}
+
+.backButton:hover {
+  opacity: 1;
 }
 
 .text {
-  color: white;
+  color: var(--text-primary);
   font-size: 18px;
 }

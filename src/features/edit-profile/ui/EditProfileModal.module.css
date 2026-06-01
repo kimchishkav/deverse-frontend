@@ -10,12 +10,13 @@
 }
 
 .modal {
-  background: #3a3d76;
+  background: var(--bg-card);
   border-radius: 20px;
   padding: 32px;
   width: 100%;
   max-width: 480px;
-  color: white;
+  color: var(--text-primary);
+  box-shadow: var(--shadow);
 }
 
 .header {
@@ -33,7 +34,7 @@
 .closeButton {
   background: none;
   border: none;
-  color: #b9b3ff;
+  color: var(--text-muted);
   font-size: 20px;
   cursor: pointer;
   padding: 4px 8px;
@@ -42,8 +43,8 @@
 }
 
 .closeButton:hover {
-  color: white;
-  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+  background: var(--bg-hover);
 }
 
 .form {
@@ -70,7 +71,7 @@
 .label {
   font-size: 13px;
   font-weight: 600;
-  color: #b9b3ff;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -80,21 +81,21 @@
   outline: none;
   border-radius: 12px;
   padding: 13px 16px;
-  background: #f5f5ff;
+  background: var(--bg-input-solid);
   font-size: 15px;
-  color: #1e1e3f;
+  color: var(--text-on-input);
   width: 100%;
   box-sizing: border-box;
 }
 
 .input::placeholder {
-  color: #9896b8;
+  color: var(--text-placeholder);
 }
 
 .inputWithPrefix {
   display: flex;
   align-items: center;
-  background: #f5f5ff;
+  background: var(--bg-input-solid);
   border-radius: 12px;
   overflow: hidden;
 }
@@ -102,7 +103,7 @@
 .prefix {
   padding: 0 0 0 16px;
   font-size: 15px;
-  color: #7367f0;
+  color: var(--accent);
   font-weight: 700;
   flex-shrink: 0;
 }
@@ -114,7 +115,7 @@
 }
 
 .error {
-  color: #ff6b81;
+  color: var(--error);
   font-size: 14px;
   font-weight: 500;
 }
@@ -127,31 +128,33 @@
 }
 
 .cancelButton {
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--border-subtle);
   border-radius: 12px;
   background: transparent;
-  color: #d7d5ff;
+  color: var(--text-secondary);
   padding: 12px 22px;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.15s;
 }
 
 .cancelButton:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.07);
+  background: var(--bg-hover);
 }
 
 .saveButton {
   border: none;
   border-radius: 12px;
-  background: #7367f0;
+  background: var(--accent);
   color: white;
   padding: 12px 22px;
   font-weight: 700;
   cursor: pointer;
+  transition: background 0.15s;
 }
 
 .saveButton:hover:not(:disabled) {
-  background: #8276ff;
+  background: var(--accent-hover);
 }
 
 .saveButton:disabled,

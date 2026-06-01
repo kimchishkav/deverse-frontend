@@ -7,5 +7,10 @@
   padding: 18px 20px;
   font-size: 16px;
   line-height: 1.5;
-  background-color: #f5f5ff;
+  background-color: var(--bg-input-solid);
+  color: var(--text-on-input);
+}
+
+.textarea::placeholder {
+  color: var(--text-placeholder);
 }

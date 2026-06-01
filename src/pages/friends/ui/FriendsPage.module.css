@@ -5,7 +5,7 @@
 }
 
 .header {
-  background-color: #3a3d76;
+  background-color: var(--bg-card);
   border-radius: 20px;
   padding: 24px 28px;
   display: flex;
@@ -15,34 +15,34 @@
 }
 
 .title {
-  color: white;
+  color: var(--text-primary);
   font-size: 28px;
   font-weight: 700;
 }
 
 .subtitle {
   margin-top: 6px;
-  color: #d7d7e8;
+  color: var(--text-secondary);
   font-size: 15px;
 }
 
 .searchInput {
   width: 360px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid var(--border-input);
   outline: none;
   border-radius: 12px;
   padding: 13px 16px;
   background-color: transparent;
-  color: white;
+  color: var(--text-primary);
   font-size: 15px;
 }
 
 .searchInput::placeholder {
-  color: #b9b3ff;
+  color: var(--text-muted);
 }
 
 .text {
-  color: white;
+  color: var(--text-primary);
   font-size: 16px;
 }
 
@@ -53,7 +53,7 @@
 }
 
 .userCard {
-  background-color: #3a3d76;
+  background-color: var(--bg-card);
   border-radius: 18px;
   padding: 18px 22px;
   display: flex;
@@ -75,35 +75,21 @@
 }
 
 .userName {
-  color: white;
+  color: var(--text-primary);
   font-size: 20px;
   font-weight: 700;
 }
 
 .profession {
   margin-top: 4px;
-  color: #e0dff7;
+  color: var(--text-secondary);
   font-size: 15px;
 }
 
 .username {
   margin-top: 4px;
-  color: #b9b3ff;
+  color: var(--text-muted);
   font-size: 14px;
-}
-
-.profileButton {
-  border: none;
-  border-radius: 10px;
-  background-color: #7367f0;
-  color: white;
-  padding: 10px 18px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.profileButton:hover {
-  background-color: #8276ff;
 }
 
 .actions {
@@ -112,14 +98,30 @@
   gap: 10px;
 }
 
-.followButton {
-  border: 1px solid #7367f0;
+.profileButton {
+  border: none;
   border-radius: 10px;
-  background-color: transparent;
-  color: #b9b3ff;
+  background-color: var(--accent);
+  color: white;
   padding: 10px 18px;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.15s;
+}
+
+.profileButton:hover {
+  background-color: var(--accent-hover);
+}
+
+.followButton {
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  background-color: transparent;
+  color: var(--text-muted);
+  padding: 10px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
 }
 
 .followButton:hover {
@@ -139,17 +141,22 @@
 
 .tab,
 .activeTab {
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid var(--border-subtle);
   background: transparent;
-  color: #d7d5ff;
+  color: var(--text-secondary);
   padding: 10px 18px;
   border-radius: 12px;
   cursor: pointer;
   font-weight: 600;
+  transition: background 0.15s;
+}
+
+.tab:hover {
+  background: var(--bg-hover);
 }
 
 .activeTab {
-  background: #7464f2;
+  background: var(--accent);
   color: white;
-  border-color: #7464f2;
+  border-color: var(--accent);
 }
