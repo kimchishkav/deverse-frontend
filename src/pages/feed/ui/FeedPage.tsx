@@ -7,6 +7,7 @@ import { CreatePostForm } from "@/features/create-post";
 import { getStoredUser, type StoredUser } from "@/shared/lib/auth";
 import { getDisplayName, getAvatarUrl } from "@/shared/lib/user";
 import { useToast } from "@/shared/ui/toast";
+import { AiChat } from "@/widgets/ai-chat";
 import { MainLayout } from "@/widgets/layout";
 import { PostList } from "@/widgets/post-list";
 
@@ -117,14 +118,18 @@ export const FeedPage = () => {
 
   return (
     <MainLayout>
-      <div className={styles.content}>
-        <CreatePostForm onCreate={handleCreatePost} />
+      <div className={styles.wrapper}>
+        <div className={styles.content}>
+          <CreatePostForm onCreate={handleCreatePost} />
 
-        {isLoading ? (
-          <p>Loading posts...</p>
-        ) : (
-          <PostList posts={posts} onDeletePost={handleDeletePost} />
-        )}
+          {isLoading ? (
+            <p>Loading posts...</p>
+          ) : (
+            <PostList posts={posts} onDeletePost={handleDeletePost} />
+          )}
+        </div>
+
+        <AiChat />
       </div>
     </MainLayout>
   );
