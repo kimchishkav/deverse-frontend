@@ -1,13 +1,16 @@
 .sidebar {
+  position: sticky;
+  top: 96px; /* 68px header + 28px contentWrapper padding */
   width: 240px;
   min-width: 240px;
+  max-height: calc(100vh - 96px - 28px);
+  overflow-y: auto;
   background-color: #34376c;
   border-radius: 20px;
   padding: 24px 20px;
   display: flex;
   flex-direction: column;
   gap: 24px;
-  height: fit-content;
 }
 
 .profileCard {

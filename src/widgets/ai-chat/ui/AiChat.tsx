@@ -24,11 +24,14 @@ export const AiChat = () => {
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const messagesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    const el = messagesRef.current;
+    if (el) {
+      el.scrollTop = el.scrollHeight;
+    }
+  }, [messages, isLoading]);
 
   const sendMessage = async (question: string) => {
     const trimmed = question.trim();
@@ -74,7 +77,7 @@ export const AiChat = () => {
         <h2 className={styles.title}>AI Assistant</h2>
       </div>
 
-      <div className={styles.messages}>
+      <div className={styles.messages} ref={messagesRef}>
         {messages.map((msg) => (
           <div
             key={msg.id}
@@ -94,7 +97,6 @@ export const AiChat = () => {
           </div>
         )}
 
-        <div ref={bottomRef} />
       </div>
 
       <div className={styles.suggestions}>

@@ -1,13 +1,13 @@
 .panel {
+  position: sticky;
+  top: 96px; /* 68px header + 28px contentWrapper padding */
   width: 260px;
   min-width: 260px;
+  height: calc(100vh - 96px - 28px);
   background-color: #3a3d76;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 68px - 56px);
-  position: sticky;
-  top: 28px;
   overflow: hidden;
 }
 
