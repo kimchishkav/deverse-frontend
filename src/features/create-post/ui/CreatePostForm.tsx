@@ -8,10 +8,8 @@ import { rewriteTone } from "@/features/rewrite-tone/api/rewriteTone";
 import styles from "./CreatePostForm.module.css";
 
 const TONES = [
-  { value: "slangy",   label: "Slangy" },
   { value: "formal",   label: "Formal" },
-  { value: "casual",   label: "Casual" },
-  { value: "polite",   label: "Polite" },
+  { value: "friendly", label: "Friendly" },
   { value: "short",    label: "Short" },
 ];
 

@@ -61,7 +61,6 @@
 .rightStats {
   display: flex;
   align-items: center;
-  gap: 18px;
 }
 
 .statButton {
@@ -93,19 +92,6 @@
   font-weight: 700;
 }
 
-.openButton {
-  border: none;
-  background: transparent;
-  color: var(--text-muted);
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.openButton:hover {
-  color: var(--text-primary);
-  text-decoration: underline;
-}
 
 .deleteButton {
   margin-left: auto;

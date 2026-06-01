@@ -4,7 +4,6 @@ import { useState } from "react";
 import type { Post } from "../model/types";
 
 import { useNavigate } from "react-router-dom";
-import { getPostDetailsRoute } from "@/shared/config/routes";
 
 import {
   CommentsSection,
@@ -46,11 +45,9 @@ import { getStoredUser } from "@/shared/lib/auth";
 import { useToast } from "@/shared/ui/toast";
 
 const TONES = [
-  { value: "slangy",  label: "Slangy" },
-  { value: "formal",  label: "Formal" },
-  { value: "casual",  label: "Casual" },
-  { value: "polite",  label: "Polite" },
-  { value: "short",   label: "Short" },
+  { value: "formal",   label: "Formal" },
+  { value: "friendly", label: "Friendly" },
+  { value: "short",    label: "Short" },
 ];
 
 type Props = {
@@ -87,10 +84,6 @@ export const PostCard = ({ post, onDelete }: Props) => {
   const [rewritingTone, setRewritingTone] = useState<string | null>(null);
 
   const isEditBusy = isImproving || rewritingTone !== null;
-
-  const handleOpenPost = () => {
-    navigate(getPostDetailsRoute(post.id));
-  };
 
   const handleToggleLike = async () => {
     if (isLikeLoading) return;
@@ -385,15 +378,7 @@ export const PostCard = ({ post, onDelete }: Props) => {
           </button>
         </div>
 
-        <div className={styles.rightStats}>
-          <button
-            type="button"
-            className={styles.openButton}
-            onClick={handleOpenPost}
-          >
-            View details
-          </button>
-        </div>
+        <div className={styles.rightStats} />
       </div>
 
       {isCommentsOpen && (
