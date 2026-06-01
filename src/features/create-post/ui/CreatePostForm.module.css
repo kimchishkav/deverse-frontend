@@ -4,7 +4,7 @@
   padding: 24px 28px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 .title {
@@ -13,6 +13,59 @@
   font-weight: 700;
 }
 
+/* ── Tone chips ── */
+.toneRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.toneLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dimmed);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.toneChips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.toneChip {
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.toneChip:hover:not(:disabled) {
+  background: rgba(115, 103, 240, 0.12);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.toneChip:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.toneChipLoading {
+  background: rgba(115, 103, 240, 0.15);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── Actions row ── */
 .actions {
   display: flex;
   align-items: center;
