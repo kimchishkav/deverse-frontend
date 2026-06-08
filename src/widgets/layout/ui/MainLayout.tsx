@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
 import { Header } from "@/widgets/header";
 import { Sidebar } from "@/widgets/sidebar";
@@ -10,12 +10,18 @@ type Props = {
 };
 
 export const MainLayout = ({ children }: Props) => {
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+
   return (
     <div className={styles.page}>
-      <Header />
+      <Header onMenuToggle={() => setIsMobileNavOpen(true)} />
+
+      {isMobileNavOpen && (
+        <div className={styles.overlay} onClick={() => setIsMobileNavOpen(false)} />
+      )}
 
       <div className={styles.contentWrapper}>
-        <Sidebar />
+        <Sidebar isOpen={isMobileNavOpen} onClose={() => setIsMobileNavOpen(false)} />
         <main className={styles.content}>{children}</main>
       </div>
     </div>

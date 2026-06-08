@@ -1,6 +1,7 @@
 .page {
   min-height: 100vh;
   background-color: var(--bg-page);
+  position: relative;
 }
 
 .contentWrapper {
@@ -13,4 +14,30 @@
 .content {
   flex: 1;
   min-height: calc(100vh - 68px - 56px);
+  min-width: 0;
+}
+
+.overlay {
+  display: none;
+}
+
+@media (max-width: 1199px) {
+  .contentWrapper {
+    gap: 20px;
+    padding: 20px 24px;
+  }
+}
+
+@media (max-width: 767px) {
+  .contentWrapper {
+    padding: 12px;
+  }
+
+  .overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 50;
+  }
 }

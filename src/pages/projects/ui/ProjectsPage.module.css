@@ -250,3 +250,33 @@
   background-color: #ff6b81;
   color: white;
 }
+
+@media (max-width: 767px) {
+  .header,
+  .form,
+  .projectCard {
+    border-radius: 14px;
+    padding: 16px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap;
+  }
+
+  .tab {
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  .actions {
+    flex-wrap: wrap;
+  }
+}

@@ -11,10 +11,35 @@
   padding: 0 38px;
 }
 
+.left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .logo {
   color: var(--accent);
   font-size: 22px;
   font-weight: 700;
+}
+
+.menuButton {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.menuButton:hover {
+  background: var(--bg-hover);
 }
 
 .right {
@@ -58,4 +83,25 @@
 .name {
   color: var(--text-primary);
   font-size: 16px;
+}
+
+@media (max-width: 1199px) {
+  .header {
+    padding: 0 24px;
+  }
+}
+
+@media (max-width: 767px) {
+  .header {
+    padding: 0 16px;
+    height: 60px;
+  }
+
+  .menuButton {
+    display: flex;
+  }
+
+  .name {
+    display: none;
+  }
 }
