@@ -204,7 +204,6 @@ export const ProfilePage = () => {
     setProfile(updated);
     setIsEditModalOpen(false);
 
-    // sync localStorage so Header/Sidebar update immediately
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
       const current = JSON.parse(savedUser);

@@ -15,7 +15,6 @@ body {
   font-family: Arial, sans-serif;
 }
 
-/* ─── Dark theme ─── */
 [data-theme="dark"] {
   --bg-page:         #272a57;
   --bg-card:         #3a3d76;
@@ -49,7 +48,6 @@ body {
   --shadow:          0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
-/* ─── Light theme ─── */
 [data-theme="light"] {
   --bg-page:         #f0f2f8;
   --bg-card:         #ffffff;

@@ -44,7 +44,6 @@ export const PostDetailsPage = () => {
               avatar_url: authorProfile.avatar_url ?? authorProfile.avatar,
             };
           } catch {
-            // не критично — просто покажем дефолтную аватарку
           }
         }
 

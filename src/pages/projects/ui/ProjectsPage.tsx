@@ -287,7 +287,6 @@ export const ProjectsPage = () => {
           </button>
         </div>
 
-        {/* ── My Projects tab ── */}
         {activeTab === "my" && (
           <div>
             <form className={styles.form} onSubmit={handleCreateProject} noValidate>
@@ -469,7 +468,6 @@ export const ProjectsPage = () => {
           </div>
         )}
 
-        {/* ── All Projects tab ── */}
         {activeTab === "all" && (
           <div>
             {isLoading ? (
